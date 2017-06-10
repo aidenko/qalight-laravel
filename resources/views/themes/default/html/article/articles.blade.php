@@ -1,4 +1,4 @@
-@extends('themes.default.front')
+@extends('themes.default.index')
 
 @section('file_css')
 @stop
@@ -16,6 +16,6 @@
             <p>{{ $article->title }}</p>
         </div>
 
-    @endforeach;
+    @endforeach
 
 @stop
