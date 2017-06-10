@@ -8,21 +8,39 @@
 
 @section('template')
 
-    <h1>Articles</h1>
+    <div class="container">
+        <a href="{{route('articles.create')}}">New</a>
 
-    <a href="{{route('articles.create')}}">New</a>
-    <br><br>
+        <div class="row">
+            <div class="col s12">
 
-    @foreach($articles as $article)
 
-        <div class="article2">
-            <p>
-                <a class="a" href="{{ route('articles.show', $article->id) }}">
-                    {{ $article->title }}
-                </a>
-            </p>
+                <ul class="collection with-header">
+                    <li class="collection-header">
+                        <h4 class="">Articles</h4>
+                    </li>
+                    @foreach($articles as $article)
+
+                        <li class="collection-item">
+                            <div>
+                                <a class="truncate" href="{{ route('articles.show', $article->id) }}">
+                                    {{ $article->title }}
+                                </a>
+                                <div class="secondary-content">
+                                    <input type="checkbox">
+                                </div>
+                            </div>
+                        </li>
+
+                    @endforeach
+                </ul>
+            </div>
         </div>
-
-    @endforeach
-
+        <div class="row">
+            <div class="col s12 right-align">
+                <div class="waves-effect waves-light btn-floating"><i class="material-icons">delete</i>button</div>
+                <div class="waves-effect waves-light btn-floating"><i class="material-icons left">cloud</i>button</div>
+            </div>
+        </div>
+    </div>
 @stop
