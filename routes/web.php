@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::get('article', 'ArticleController@index');
+
+Route::resource('admin/articles', 'Admin\ArticleController');
