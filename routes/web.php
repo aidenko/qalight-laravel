@@ -19,3 +19,4 @@ Route::get('article', 'ArticleController@index');
 
 Route::resource('admin/articles', 'Admin\ArticleController');
 Route::resource('admin/tags', 'Admin\TagController');
+Route::resource('admin/categories', 'Admin\CategoryController');
