@@ -32,17 +32,7 @@ class TagController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        $this->validate($request, [
-            'name' => 'required|max:64|unique:tags'
-        ]);
-
-        $tag = new Tag();
-
-        $tag->name = $request->name;
-
-        $tag->save();
-
-        return redirect()->route('tags.show', $tag->id);
+        return redirect()->route('tags.show', $this->save($request)->id);
     }
 
     /**
@@ -73,17 +63,10 @@ class TagController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        $this->validate($request, [
-                'name' => 'required|max:64|unique:tags'
-            ]);
 
-        $tag = Tag::find($id);
+        $this->save($request, $id);
 
-        $tag->name = $request->name;;
-
-        $tag->save();
-
-        return redirect()->route('tags.show', $tag->id);
+        return redirect()->route('tags.show', $id);
     }
 
     /**
@@ -96,5 +79,22 @@ class TagController extends Controller{
         Tag::destroy($id);
 
         return redirect()->route('tags.index');
+    }
+
+    private function save(Request $request, $id = null) {
+        $this->validate($request, [
+            'name' => 'required|max:64|unique:tags'
+        ]);
+
+        if(is_null($id))
+            $tag = new Tag();
+        else
+            $tag = Tag::find($id);
+
+        $tag->name = $request->name;;
+
+        $tag->save();
+
+        return $tag;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Article;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Symfony\Component\Yaml\Tests\A;
 
 class ArticleController extends Controller{
     /**
@@ -32,23 +33,7 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        $this->validate($request, [
-            'title' => 'required|max:255',
-            'summary' => 'required',
-            'article' => 'required'
-        ]);
-
-        $article = new Article();
-
-        $article->title = $request->title;
-        $article->summary = $request->summary;
-        $article->content = $request->article;
-        $article->slug = str_slug(uniqid().'-'.$request->title);
-        $article->active = (boolean)$request->active;
-
-        $article->save();
-
-        return redirect()->route('articles.show', $article->id);
+        return redirect()->route('articles.show', $this->save($request)->id);
     }
 
     /**
@@ -79,23 +64,10 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        $this->validate($request, [
-            'title' => 'required|max:255',
-            'summary' => 'required',
-            'article' => 'required'
-        ]);
 
-        $article = Article::find($id);
+        $this->save($request, $id);
 
-        $article->title = $request->title;
-        $article->summary = $request->summary;
-        $article->content = $request->article;
-        $article->slug = str_slug(uniqid().'-'.$request->title);
-        $article->active = (boolean)$request->active;
-
-        $article->save();
-
-        return redirect()->route('articles.show', $article->id);
+        return redirect()->route('articles.show', $id);
     }
 
     /**
@@ -108,5 +80,28 @@ class ArticleController extends Controller{
         Article::destroy($id);
 
         return redirect()->route('articles.index');
+    }
+
+    private function save(Request $request, $id = null) {
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'summary' => 'required',
+            'article' => 'required'
+        ]);
+
+        if(is_null($id))
+            $article = new Article();
+        else
+            $article = Article::find($id);
+
+        $article->title = $request->title;
+        $article->summary = $request->summary;
+        $article->content = $request->article;
+        $article->slug = str_slug(uniqid().'-'.$request->title);
+        $article->active = (boolean)$request->active;
+
+        $article->save();
+
+        return $article;
     }
 }
