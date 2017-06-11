@@ -15,10 +15,17 @@
 </head>
 <body>
 <div class="container">
-    <div class="lang-switch"></div>
+    <div class="row">
+        <div class="col s12 m4 l3">
+            @include('themes.admin.html.leftbar.leftbar')
+        </div>
+        <div class="col s12 m8 l9">
+            @yield('template')
+        </div>
+    </div>
 </div>
 
-@yield('template')
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
