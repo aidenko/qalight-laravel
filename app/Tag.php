@@ -14,4 +14,8 @@ class Tag extends Model{
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    public function  articles(){
+        return $this-> morphedByMany('App\Article', 'taggable');
+    }
 }
