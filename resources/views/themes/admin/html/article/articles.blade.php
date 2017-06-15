@@ -12,8 +12,6 @@
 
     <div class="row">
         <div class="col s12">
-
-
             <ul class="collection with-header">
                 <li class="collection-header">
                     <h4 class="">Articles</h4>
