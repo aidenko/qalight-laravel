@@ -28,9 +28,12 @@
 
     <div class="row">
         <div class="col s12">
-            <h1>Tags</h1>
-            <a href="{{route('tags.create')}}" class="waves-effect waves-light btn"><i class="material-icons left">add</i>New</a>
-            <br><br>
+            <h4>
+                Tags
+                <a href="{{route('tags.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+            </h4>
+
+            <br>
             <div class="chips">
 
                 @foreach($tags as $tag)
