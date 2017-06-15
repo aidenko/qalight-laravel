@@ -15,10 +15,10 @@
 </head>
 <body>
 <div class="row">
-    <div class="col s12 m4 l3">
+    <div class="col s12 m4 l2">
         @include('themes.admin.html.leftbar.leftbar')
     </div>
-    <div class="col s12 m8 l9">
+    <div class="col s12 m8 l10">
         @yield('template')
     </div>
 </div>
