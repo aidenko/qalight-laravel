@@ -1,14 +1,35 @@
 @extends('themes.admin.index')
 
 @section('file_css')
+    <style>
+        .chip {
+            cursor: pointer;
+        }
+    </style>
 @stop
 
 @section('file_js')
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('.chip')
+                    .hover(
+                            function () {
+                                jQuery(this).addClass('selected');
+                            },
+                            function () {
+                                if (!jQuery(this).find('input').prop('checked'))
+                                    jQuery(this).removeClass('selected');
+                            }
+                    )
+                    .click(function () {
+                        var i = jQuery(this).find('input');
+                        i.prop('checked', !i.prop('checked'));
+                    })
+        });
+    </script>
 @stop
 
 @section('template')
-
-    <h2>Edit article</h2>
 
     <div class="row">
         <div class="col s12 left-align">
@@ -22,6 +43,8 @@
                 </div>
             @endif
 
+            <h2>Edit article</h2>
+
             <form class="col s12" method="post" action="{{ route('articles.update', $article->id) }}">
 
                 {{csrf_field()}}
@@ -29,7 +52,7 @@
 
                 <div class="row">
                     <div class="input-field col s12">
-                        <input type="text" name="title" id="title"  value="{{$article->title}}">
+                        <input type="text" name="title" id="title" value="{{$article->title}}">
                         <label for="title">Title</label>
                     </div>
                 </div>
@@ -62,8 +85,12 @@
                     <br>
                     <h4>Tags</h4>
                     <div class="chips">
-                        <div class="chip">Tag 1</div>
-                        <div class="chip selected">Tag 2</div>
+                        @foreach ($tags as $tag)
+                            <div class="chip {{$assigned->contains($tag->id) ? ' selected' : ''}}">
+                                {{$tag->name}}
+                                <input type="checkbox" {{$assigned->contains($tag->id) ? ' checked' : ''}} name="tags[]" value="{{$tag->id}}">
+                            </div>
+                        @endforeach
                     </div>
                 </div>
 

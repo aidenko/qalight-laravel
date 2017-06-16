@@ -1,12 +1,6 @@
 @extends('themes.admin.index')
 
 @section('file_css')
-    <style>
-        .chip a {
-            color: rgba(0, 0, 0,)
-        }
-
-    </style>
 @stop
 
 @section('file_js')

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Article;
+use App\Tag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Symfony\Component\Yaml\Tests\A;
 
 class ArticleController extends Controller{
     /**
@@ -23,7 +23,7 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.article.new');
+        return view('themes.admin.html.article.new', array('tags' => Tag::all()));
     }
 
     /**
@@ -33,7 +33,11 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        return redirect()->route('articles.show', $this->save($request)->id);
+
+        $article = $this->save($request);
+        $article->tags()->sync($request->tags);
+
+        return redirect()->route('articles.show', $article->id);
     }
 
     /**
@@ -43,7 +47,10 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        return view('themes.admin.html.article.article', ['article' => Article::find($id)]);
+
+        $article = Article::find($id);
+
+        return view('themes.admin.html.article.article', ['article' => $article, 'tags' => $article->tags]);
     }
 
     /**
@@ -53,7 +60,18 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        return view('themes.admin.html.article.edit')->withArticle(Article::find($id));
+
+        $article = Article::find($id);
+        $tags = Tag::all();
+
+        return view('themes.admin.html.article.edit',
+            array(
+                'article' => $article,
+                'tags' => $tags,
+                'assigned' => $article->tags->map(function($tag){
+                    return $tag->id;
+                })
+            ));
     }
 
     /**
@@ -65,7 +83,7 @@ class ArticleController extends Controller{
      */
     public function update(Request $request, $id) {
 
-        $this->save($request, $id);
+        $this->save($request, $id)->tags()->sync($request->tags);
 
         return redirect()->route('articles.show', $id);
     }

@@ -41,4 +41,21 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col s12">
+            <br>
+            <h4>Tags</h4>
+
+            @if ($tags->isEmpty())
+                No tags
+            @else
+                <div class="chips">
+                    @foreach($tags as $tag)
+                        <div class="chip selected">{{$tag->name}}</div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
+
 @stop
