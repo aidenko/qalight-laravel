@@ -46,7 +46,6 @@ class CategoryController extends Controller{
     public function show($id) {
 
         $category = Category::find($id);
-        $category->descendants();
 
         return view('themes.admin.html.category.category',
             ['category' => $category,
@@ -67,7 +66,7 @@ class CategoryController extends Controller{
         return view('themes.admin.html.category.edit',
             [
                 'category' => $category,
-                'categories' => Category::all()->except($id)
+                'categories' => Category::whereNotIn('id', array_merge([$id], $category->descendants->pluck('id')->toArray()))->get()
             ]);
     }
 
