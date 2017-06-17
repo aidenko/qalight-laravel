@@ -1,6 +1,15 @@
 @extends('themes.admin.index')
 
 @section('file_css')
+    <style>
+        .category {
+            font-size: .5em;
+        }
+
+        .category i {
+            font-size: .75em;
+        }
+    </style>
 @stop
 
 @section('file_js')
@@ -22,7 +31,14 @@
     </div>
     <div class="row">
         <div class="col s12">
-            <h4>{{$article->title}}</h4>
+            <h4>{{$article->title}}
+                @if($category)
+                    <a href="{{route('categories.show', $category->id)}}" class="category">
+                        <i class="material-icons">link</i>
+                        {{$category->name}}
+                    </a>
+                @endif
+            </h4>
         </div>
     </div>
 

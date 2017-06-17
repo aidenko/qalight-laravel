@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Article;
+use App\Category;
 use App\Tag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -23,7 +24,7 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.article.new', array('tags' => Tag::all()));
+        return view('themes.admin.html.article.new', array('tags' => Tag::all(), 'categories' => Category::all()));
     }
 
     /**
@@ -50,7 +51,12 @@ class ArticleController extends Controller{
 
         $article = Article::find($id);
 
-        return view('themes.admin.html.article.article', ['article' => $article, 'tags' => $article->tags]);
+        return view('themes.admin.html.article.article',
+            [
+                'article' => $article,
+                'tags' => $article->tags,
+                'category' => $article->category
+            ]);
     }
 
     /**
@@ -68,7 +74,8 @@ class ArticleController extends Controller{
             array(
                 'article' => $article,
                 'tags' => $tags,
-                'assigned' => $article->tags->pluck('id')
+                'assigned' => $article->tags->pluck('id'),
+                'categories' => Category::all()
             ));
     }
 
@@ -115,6 +122,7 @@ class ArticleController extends Controller{
         $article->content = $request->article;
         $article->slug = str_slug(uniqid().'-'.$request->title);
         $article->active = (boolean)$request->active;
+        $article->category_id = $request->category_id;
 
         $article->save();
 

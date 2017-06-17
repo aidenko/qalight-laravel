@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Kalnoy\Nestedset\NodeTrait;
 
-class Category extends Model
-{
-    use SoftDeletes;
+class Category extends Model{
+    use SoftDeletes, NodeTrait;
 
     /**
      * The attributes that should be mutated to dates.
@@ -16,27 +16,15 @@ class Category extends Model
      */
     protected $dates = ['deleted_at'];
 
-    public function articles(){
+    public function articles() {
         return $this->hasMany('App\Article');
     }
 
-    public function children(){
+    public function children() {
         return $this->hasMany('App\Category', 'parent_id');
     }
 
-    public function parent(){
+    public function parent() {
         return $this->belongsTo('App\Category', 'parent_id');
-    }
-
-    public function descendants(){
-
-        //$descendents = [];
-
-        //$children = $this->children;
-
-        $d = Category::with('children')->where('parent_id', $this->id)->get();
-        $d = $d->pluck('id');
-
-        var_dump($d);
     }
 }
