@@ -11,6 +11,9 @@
 @section('file_js')
     <script>
         jQuery(document).ready(function () {
+
+            jQuery('select').material_select();
+
             jQuery('.chip')
                     .hover(
                             function () {
@@ -49,6 +52,18 @@
 
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="PUT">
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select name="category_id">
+                            <option value="">No parent</option>
+                            @foreach ($categories as $c)
+                                <option value="{{$c->id}}"{{$article->category_id == $c->id ? ' selected' : ''}}>{{$c->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Parent category</label>
+                    </div>
+                </div>
 
                 <div class="row">
                     <div class="input-field col s12">

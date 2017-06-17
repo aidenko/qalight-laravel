@@ -11,6 +11,9 @@
 @section('file_js')
     <script>
         jQuery(document).ready(function () {
+
+            jQuery('select').material_select();
+
             jQuery('.chip')
                     .hover(
                             function () {
@@ -43,11 +46,23 @@
                 </div>
             @endif
 
-            <h2>Edit article</h2>
+            <h2>New article</h2>
 
             <form class="col s12" method="post" action="{{ route('articles.store') }}">
 
                 {{csrf_field()}}
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select name="category_id">
+                            <option value="">No parent</option>
+                            @foreach ($categories as $c)
+                                <option value="{{$c->id}}">{{$c->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Parent category</label>
+                    </div>
+                </div>
 
                 <div class="row">
                     <div class="input-field col s12">
