@@ -68,9 +68,7 @@ class ArticleController extends Controller{
             array(
                 'article' => $article,
                 'tags' => $tags,
-                'assigned' => $article->tags->map(function($tag){
-                    return $tag->id;
-                })
+                'assigned' => $article->tags->pluck('id')
             ));
     }
 
