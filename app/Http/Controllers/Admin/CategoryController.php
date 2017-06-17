@@ -22,7 +22,7 @@ class CategoryController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.category.new');
+        return view('themes.admin.html.category.new', ['categories' => Category::all()]);
     }
 
     /**
@@ -44,7 +44,14 @@ class CategoryController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        return view('themes.admin.html.category.category', ['category' => Category::find($id)]);
+
+        $category = Category::find($id);
+        $category->descendants();
+
+        return view('themes.admin.html.category.category',
+            ['category' => $category,
+             'parent' => $category->parent
+            ]);
     }
 
     /**
@@ -54,7 +61,14 @@ class CategoryController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        return view('themes.admin.html.category.edit')->withCategory(Category::find($id));
+
+        $category = Category::find($id);
+
+        return view('themes.admin.html.category.edit',
+            [
+                'category' => $category,
+                'categories' => Category::all()->except($id)
+            ]);
     }
 
     /**

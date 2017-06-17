@@ -24,6 +24,9 @@
         <div class="col s12">
             <h4>{{$article->title}}</h4>
         </div>
+    </div>
+
+    <div class="row">
         <div class="col s12">
             <div class="card grey darken-2">
                 <div class="card-content white-text">
@@ -32,6 +35,9 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="row">
         <div class="col s12">
             <div class="card grey lighten-4">
                 <div class="card-content">

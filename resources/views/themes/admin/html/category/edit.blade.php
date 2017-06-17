@@ -4,38 +4,74 @@
 @stop
 
 @section('file_js')
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('select').material_select();
+        });
+
+    </script>
 @stop
 
 @section('template')
 
-    <h2>New article</h2>
+    <div class="row">
+        <div class="col s12 left-align">
+            @if (count($errors) > 0)
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <h2>Edit category</h2>
+
+            <form class="col s12" method="post" action="{{ route('categories.update', $category->id) }}">
+
+                {{csrf_field()}}
+                <input name="_method" type="hidden" value="PUT">
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="text" name="name" id="name" value="{{$category->name}}">
+                        <label for="name">Name</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 switch">
+                        <label>
+                            Active
+                            <input type="checkbox" name="active">
+                            <span class="lever"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select name="parent_id">
+                            <option value="">No parent</option>
+                            @foreach ($categories as $c)
+                                <option value="{{$c->id}}"{{$c->id == $category->parent_id ? ' selected' : ''}}>{{$c->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Parent category</label>
+                    </div>
+                </div>
 
 
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+                <div class="row">
+                    <br>
+                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                        Save
+                        <i class="material-icons left">save</i>
+                    </button>
+                </div>
+            </form>
         </div>
-    @endif
-
-    <form method="post" action="{{ route('categories.update', $category->id) }}">
-
-        {{csrf_field()}}
-        <input name="_method" type="hidden" value="PUT">
-
-        <div>
-            <input type="text" name="name" placeholder="Category name" value="{{$category->name}}">
-        </div>
-        <div>
-            <select name="parent_id"></select>
-        </div>
-
-        <div>
-            <input type="submit" value="update">
-        </div>
-    </form>
+    </div>
 
 @stop

@@ -43,7 +43,7 @@
                 </div>
             @endif
 
-            <h2>Edit article</h2>
+            <h2>New article</h2>
 
             <form class="col s12" method="post" action="{{ route('articles.store') }}">
 
