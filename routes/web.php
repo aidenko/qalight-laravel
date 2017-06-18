@@ -20,3 +20,8 @@ Route::get('article', 'ArticleController@index');
 Route::resource('admin/articles', 'Admin\ArticleController');
 Route::resource('admin/tags', 'Admin\TagController');
 Route::resource('admin/categories', 'Admin\CategoryController');
+Route::resource('admin/users', 'Admin\UserController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
