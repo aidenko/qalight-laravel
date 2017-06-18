@@ -5,7 +5,7 @@
 
 @section('file_js')
     <script>
-        jQuery('.edit, .view').click(function(event){
+        jQuery('.active, .edit, .view, .delete').click(function(event){
             event.stopPropagation();
         });
     </script>
@@ -28,19 +28,32 @@
                     <li>
                         <div class="collapsible-header truncate">
 
-                            {{--<p>--}}
-                                {{--<input type="checkbox" id="article-{{$article->id}}" />--}}
-                                {{--<label for="article-{{$article->id}}"></label>--}}
-                            {{--</p>--}}
-
                             {{ $article->title }}
-                            <a class="teal-text text-darken-1 right edit"  href="{{ route('articles.edit', $article->id) }}" title="Edit article">
-                                <i class="material-icons">edit</i>
-                            </a>
 
-                            <a class="blue-text text-lighten-2 right view" href="{{ route('articles.show', $article->id) }}" target="_blank" title="View article">
-                                <i class="material-icons">open_in_new</i>
-                            </a>
+                            <div class="actions right">
+
+                                <div class="switch left active">
+                                    <label>
+                                        Active
+                                        <input type="checkbox"{{$article->active ? ' checked' : ''}}>
+                                        <span class="lever"></span>
+                                    </label>
+                                </div>
+
+                                <a class="blue-text text-lighten-2 view" href="{{ route('articles.show', $article->id) }}" target="_blank" title="View article">
+                                    <i class="material-icons">open_in_new</i>
+                                </a>
+
+                                <a class="teal-text text-darken-1 edit"  href="{{ route('articles.edit', $article->id) }}" title="Edit article">
+                                    <i class="material-icons">edit</i>
+                                </a>
+
+                                <span class="delete">
+                                    <input type="checkbox" id="article-{{$article->id}}" />
+                                    <label for="article-{{$article->id}}">&nbsp;</label>
+                                </span>
+                            </div>
+
                         </div>
                         <div class="collapsible-body grey lighten-4">{{$article->summary}}</div>
                     </li>
