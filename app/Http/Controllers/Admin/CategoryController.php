@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Category;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\CategoryRequest;
 use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller{
@@ -28,10 +28,10 @@ class CategoryController extends Controller{
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\Admin\CategoryRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(CategoryRequest $request) {
         $category = $this->save($request);
 
         return redirect()->route('categories.show', $category->id);
@@ -73,11 +73,11 @@ class CategoryController extends Controller{
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\Admin\CategoryRequest $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(CategoryRequest $request, $id) {
 
         $this->save($request, $id);
 
@@ -96,10 +96,12 @@ class CategoryController extends Controller{
         return redirect()->route('categories.index');
     }
 
-    private function save(Request $request, $id = null) {
-        $this->validate($request, [
-            'name' => 'required|max:255'
-        ]);
+    /**
+     * @param CategoryRequest $request
+     * @param null $id
+     * @return Category
+     */
+    private function save(CategoryRequest $request, $id = null) {
 
         if(is_null($id))
             $category = new Category();

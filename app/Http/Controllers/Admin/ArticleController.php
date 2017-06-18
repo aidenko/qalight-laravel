@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Article;
 use App\Category;
+use App\Http\Requests\Admin\ArticleRequest;
 use App\Tag;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class ArticleController
+ * @package App\Http\Controllers\Admin
+ */
 class ArticleController extends Controller{
     /**
      * Display a listing of the resource.
@@ -30,10 +34,10 @@ class ArticleController extends Controller{
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\Admin\ArticleRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(ArticleRequest $request) {
 
         $article = $this->save($request);
         $article->tags()->sync($request->tags);
@@ -82,11 +86,11 @@ class ArticleController extends Controller{
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\Admin\ArticleRequest $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(ArticleRequest $request, $id) {
 
         $this->save($request, $id)->tags()->sync($request->tags);
 
@@ -105,12 +109,12 @@ class ArticleController extends Controller{
         return redirect()->route('articles.index');
     }
 
-    private function save(Request $request, $id = null) {
-        $this->validate($request, [
-            'title' => 'required|max:255',
-            'summary' => 'required',
-            'article' => 'required'
-        ]);
+    /**
+     * @param  \App\Http\Requests\Admin\ArticleRequest $request
+     * @param null $id
+     * @return Article
+     */
+    private function save(ArticleRequest $request, $id = null) {
 
         if(is_null($id))
             $article = new Article();

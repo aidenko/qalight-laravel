@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\TagRequest;
 use App\Tag;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class TagController extends Controller{
@@ -28,10 +28,10 @@ class TagController extends Controller{
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\Admin\TagRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(TagRequest $request) {
         return redirect()->route('tags.show', $this->save($request)->id);
     }
 
@@ -58,11 +58,11 @@ class TagController extends Controller{
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\Admin\TagRequest $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(TagRequest $request, $id) {
 
         $this->save($request, $id);
 
@@ -81,11 +81,12 @@ class TagController extends Controller{
         return redirect()->route('tags.index');
     }
 
-    private function save(Request $request, $id = null) {
-        $this->validate($request, [
-            'name' => 'required|max:64|unique:tags'
-        ]);
-
+    /**
+     * @param TagRequest $request
+     * @param null $id
+     * @return Tag
+     */
+    private function save(TagRequest $request, $id = null) {
         if(is_null($id))
             $tag = new Tag();
         else
