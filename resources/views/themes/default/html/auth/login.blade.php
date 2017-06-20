@@ -44,10 +44,17 @@
                         </div>
 
                         <div class="row">
-                            <div class="col s6">
+                            <div class="col s3">
                                 <button class="btn waves-effect waves-light" type="submit" name="action">Login
                                     <i class="material-icons left">perm_identity</i>
                                 </button>
+                            </div>
+
+                            <div class="col s3">
+                                <a class="btn btn-link" href="{{ route('register') }}">
+                                    Register
+                                    <i class="material-icons left">account_box</i>
+                                </a>
                             </div>
 
                             <div class="col s6">
