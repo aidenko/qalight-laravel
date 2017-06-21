@@ -31,3 +31,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function(){
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('auth/github', 'Auth\SocialiteLoginController@redirectToGithubAuth')->name('github.auth');
+Route::get('auth/github/callback', 'Auth\SocialiteLoginController@handleGithubCallback')->name('github.auth.callback');
