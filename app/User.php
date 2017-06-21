@@ -30,4 +30,8 @@ class User extends Authenticatable{
     public function setPasswordAttribute($password) {
         $this->attributes['password'] = (Hash::needsRehash($password) ? bcrypt($password) : $password);
     }
+
+    public function socialite(){
+        return $this->hasOne('App\Socialite');
+    }
 }

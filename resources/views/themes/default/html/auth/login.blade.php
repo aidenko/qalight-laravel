@@ -64,6 +64,12 @@
                                 </a>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div>
+                                <a href="{{route('github.auth')}}">Github</a>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
