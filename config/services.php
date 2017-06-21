@@ -35,4 +35,10 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'github' => [
+        'client_id' => 'f44a6f5c8c0460707976',
+        'client_secret' => '321d5bd58d72d3a6c47ecb4819e6bd3bf87a4b8d',
+        'redirect' => 'http://qalight-laravel.app/auth/github/callback',
+    ],
+
 ];
