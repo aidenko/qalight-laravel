@@ -30,9 +30,7 @@ class SocialiteLoginController extends Controller{
 
         $user = User::where('email', $email)->first();
 
-        if(!$user || $user->isEmpty()){
-
-
+        if(!$user){
             //create a new user and save it
             $user = new User();
             $user->name = (function() use ($githubUser) {
@@ -49,7 +47,6 @@ class SocialiteLoginController extends Controller{
             $user->save();
 
             //create new socialite record and assign to a user
-
             $socialite = new \App\Socialite();
 
             $socialite->provider = 'github';
