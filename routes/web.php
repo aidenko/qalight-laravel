@@ -17,10 +17,16 @@ Route::get('/', function () {
 
 Route::get('article', 'ArticleController@index');
 
-Route::resource('admin/articles', 'Admin\ArticleController');
-Route::resource('admin/tags', 'Admin\TagController');
-Route::resource('admin/categories', 'Admin\CategoryController');
-Route::resource('admin/users', 'Admin\UserController');
+
+
+Route::middleware(['auth'])->prefix('admin')->group(function(){
+    Route::get('/', 'Admin\AdminController@index')->name('admin');
+
+    Route::resource('articles', 'Admin\ArticleController');
+    Route::resource('tags', 'Admin\TagController');
+    Route::resource('categories', 'Admin\CategoryController');
+    Route::resource('users', 'Admin\UserController');
+});
 
 Auth::routes();
 
