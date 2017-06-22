@@ -66,14 +66,8 @@
                         </div>
 
                         <div class="row">
-                            <div class="col s3">
+                            <div>
                                 <a href="{{route('github.auth')}}">Github</a>
-                            </div>
-                            <div class="col s3">
-                                <a href="{{route('facebook.auth')}}">Facebook</a>
-                            </div>
-                            <div class="col s3">
-                                <a href="{{route('google.auth')}}">Google</a>
                             </div>
                         </div>
                     </form>

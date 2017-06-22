@@ -34,9 +34,3 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('auth/github', 'Auth\SocialiteLoginController@redirectToGithubAuth')->name('github.auth');
 Route::get('auth/github/callback', 'Auth\SocialiteLoginController@handleGithubCallback')->name('github.auth.callback');
-
-Route::get('auth/facebook', 'Auth\SocialiteLoginController@redirectToFacebookAuth')->name('facebook.auth');
-Route::get('auth/facebook/callback', 'Auth\SocialiteLoginController@handleFacebookCallback')->name('facebook.auth.callback');
-
-Route::get('auth/google', 'Auth\SocialiteLoginController@redirectToGoogleAuth')->name('google.auth');
-Route::get('auth/google/callback', 'Auth\SocialiteLoginController@handleGoogleCallback')->name('google.auth.callback');
