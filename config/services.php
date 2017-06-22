@@ -41,4 +41,16 @@ return [
         'redirect' => 'http://qalight-laravel.app/auth/github/callback',
     ],
 
+    'facebook' => [
+        'client_id' => '1313023828812481',
+        'client_secret' => '0c90b74eb634568ae66450d3a390d735',
+        'redirect' => 'http://qalight-laravel.app/auth/facebook/callback',
+    ],
+
+    'google' => [
+        'client_id' => '1052030622483-jn00igaron3n631fv285ms7g6uajr2bb.apps.googleusercontent.com',
+        'client_secret' => 'cJEQwo45GAAhk75EEQ6sBqhk',
+        'redirect' => 'http://qalight-laravel.app/auth/google/callback',
+    ],
+
 ];
