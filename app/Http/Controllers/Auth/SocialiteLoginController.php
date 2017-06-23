@@ -126,6 +126,7 @@ class SocialiteLoginController extends Controller{
         $socialite = new \App\Socialite();
 
         $socialite->provider = $provider;
+        $socialite->original_provider = $provider;
 
         $user->socialite()->save($socialite);
     }
