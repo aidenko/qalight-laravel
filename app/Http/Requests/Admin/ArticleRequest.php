@@ -26,7 +26,8 @@ class ArticleRequest extends FormRequest
         return [
             'title' => 'required|max:255',
             'summary' => 'required',
-            'article' => 'required'
+            'article' => 'required',
+            'author_id' => 'required|exists:users,id'
         ];
     }
 }

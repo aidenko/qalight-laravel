@@ -22,4 +22,12 @@ class Article extends Model{
     public function tags() {
         return $this->morphToMany('App\Tag', 'taggable');
     }
+
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
+
+    public function  author(){
+        return $this->belongsTo('App\User', 'author_id');
+    }
 }

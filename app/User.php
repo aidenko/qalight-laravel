@@ -38,4 +38,12 @@ class User extends Authenticatable{
     public function roles() {
         return $this->belongsToMany('App\Role');
     }
+
+    public function createdArticles() {
+        return $this->hasMany('App\Article');
+    }
+
+    public function authoredArticles() {
+        return $this->hasMany('App\Article', 'author_id');
+    }
 }

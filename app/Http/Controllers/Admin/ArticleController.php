@@ -7,6 +7,8 @@ use App\Category;
 use App\Http\Requests\Admin\ArticleRequest;
 use App\Tag;
 use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class ArticleController
@@ -28,7 +30,12 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.article.new', array('tags' => Tag::all(), 'categories' => Category::all()));
+        return view('themes.admin.html.article.new', array(
+            'tags' => Tag::all(),
+            'categories' => Category::all(),
+            'authors' => User::all(),
+            'user' => Auth::user()
+        ));
     }
 
     /**
@@ -79,7 +86,8 @@ class ArticleController extends Controller{
                 'article' => $article,
                 'tags' => $tags,
                 'assigned' => $article->tags->pluck('id'),
-                'categories' => Category::all()
+                'categories' => Category::all(),
+                'authors' => User::all()
             ));
     }
 
@@ -127,6 +135,8 @@ class ArticleController extends Controller{
         $article->slug = str_slug(uniqid().'-'.$request->title);
         $article->active = (boolean)$request->active;
         $article->category_id = $request->category_id;
+        $article->user_id = ($article->user_id === null ? Auth::user()->id : $article->user_id);
+        $article->author_id = $request->author_id;
 
         $article->save();
 
