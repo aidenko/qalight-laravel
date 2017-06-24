@@ -31,7 +31,19 @@ class User extends Authenticatable{
         $this->attributes['password'] = (Hash::needsRehash($password) ? bcrypt($password) : $password);
     }
 
-    public function socialite(){
+    public function socialite() {
         return $this->hasOne('App\Socialite');
+    }
+
+    public function roles() {
+        return $this->belongsToMany('App\Role');
+    }
+
+    public function createdArticles() {
+        return $this->hasMany('App\Article');
+    }
+
+    public function authoredArticles() {
+        return $this->hasMany('App\Article', 'author_id');
     }
 }

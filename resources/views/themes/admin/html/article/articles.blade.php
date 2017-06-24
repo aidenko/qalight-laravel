@@ -55,7 +55,11 @@
                             </div>
 
                         </div>
-                        <div class="collapsible-body grey lighten-4">{{$article->summary}}</div>
+                        <div class="collapsible-body grey lighten-4">
+                            {{$article->author->name}}
+                            <br>
+                            {{$article->summary}}
+                        </div>
                     </li>
                 @endforeach
             </ul>
