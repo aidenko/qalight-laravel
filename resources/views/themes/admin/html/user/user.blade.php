@@ -40,4 +40,21 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col s12">
+            <br>
+            <h4>Roles</h4>
+
+            @if ($user->roles->isEmpty())
+                No Roles
+            @else
+                <div class="chips">
+                    @foreach($user->roles as $role)
+                        <div class="chip selected">{{$role->name}}</div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
+
 @stop
