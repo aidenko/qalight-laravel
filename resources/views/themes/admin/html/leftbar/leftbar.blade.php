@@ -12,5 +12,7 @@
     <li>
         <a href="{{ route('users.index') }}">Users</a>
     </li>
-
+    <li>
+        <a href="{{ route('roles.index') }}">Roles</a>
+    </li>
 </ul>

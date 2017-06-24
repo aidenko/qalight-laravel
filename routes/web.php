@@ -26,6 +26,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function(){
     Route::resource('tags', 'Admin\TagController');
     Route::resource('categories', 'Admin\CategoryController');
     Route::resource('users', 'Admin\UserController');
+    Route::resource('roles', 'Admin\RoleController');
 });
 
 Auth::routes();
