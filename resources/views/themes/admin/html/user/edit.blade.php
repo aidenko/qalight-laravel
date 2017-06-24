@@ -4,6 +4,11 @@
 @stop
 
 @section('file_js')
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('select').material_select();
+        });
+    </script>
 @stop
 
 @section('template')
@@ -45,6 +50,18 @@
                     <div class="input-field col s12">
                         <input type="password" name="password" id="password" value="{{$user->password}}">
                         <label for="password">Password</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select name="roles[]" multiple>
+                            <option value="">No Roles</option>
+                            @foreach ($roles as $role)
+                                <option value="{{$role->id}}"{{$user_roles->contains($role->id) ? ' selected' : ''}}>{{$role->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Roles</label>
                     </div>
                 </div>
 
