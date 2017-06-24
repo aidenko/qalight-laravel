@@ -55,7 +55,6 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <select name="roles[]" multiple>
-                            <option value="">No Roles</option>
                             @foreach ($roles as $role)
                                 <option value="{{$role->id}}">{{$role->name}}</option>
                             @endforeach
