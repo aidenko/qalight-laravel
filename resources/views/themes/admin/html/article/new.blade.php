@@ -66,6 +66,17 @@
 
                 <div class="row">
                     <div class="input-field col s12">
+                        <select name="author_id">
+                            @foreach ($authors as $author)
+                                <option value="{{$author->id}}"{{$author->id == $user->id ? 'selected' : ''}}>{{$author->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Author</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
                         <input type="text" name="title" id="title">
                         <label for="title">Title</label>
                     </div>
