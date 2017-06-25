@@ -13,7 +13,7 @@ class PermissionController extends Controller{
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function list() {
         return view('themes.admin.html.permission.permissions', ['permissions' => Permission::all()]);
     }
 
