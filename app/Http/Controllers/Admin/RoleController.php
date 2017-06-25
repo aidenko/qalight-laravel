@@ -14,7 +14,7 @@ class RoleController extends Controller{
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function list() {
         return view('themes.admin.html.role.roles', ['roles' => Role::all()]);
     }
 
