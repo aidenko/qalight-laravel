@@ -4,6 +4,11 @@
 @stop
 
 @section('file_js')
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('select').material_select();
+        });
+    </script>
 @stop
 
 @section('template')
@@ -22,7 +27,7 @@
 
             <h2>New user</h2>
 
-            <form class="col s12" method="post" action="{{ route('users.store') }}">
+            <form class="col s12" method="post" action="{{ route('admin.user.store') }}">
 
                 {{csrf_field()}}
 
@@ -47,28 +52,17 @@
                     </div>
                 </div>
 
-                {{--<div class="row">--}}
-                    {{--<div class="switch">--}}
-                        {{--<label>--}}
-                            {{--Active--}}
-                            {{--<input type="checkbox" name="active">--}}
-                            {{--<span class="lever"></span>--}}
-                        {{--</label>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-
-                {{--<div class="row">--}}
-                    {{--<br>--}}
-                    {{--<h4>Tags</h4>--}}
-                    {{--<div class="chips">--}}
-                        {{--@foreach ($tags as $tag)--}}
-                            {{--<div class="chip">--}}
-                                {{--{{$tag->name}}--}}
-                                {{--<input type="checkbox" name="tags[]" value="{{$tag->id}}">--}}
-                            {{--</div>--}}
-                        {{--@endforeach--}}
-                    {{--</div>--}}
-                {{--</div>--}}
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select name="roles[]" multiple>
+                            <option value="">No Roles</option>
+                            @foreach ($roles as $role)
+                                <option value="{{$role->id}}">{{$role->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Roles</label>
+                    </div>
+                </div>
 
                 <div class="row">
                     <br>

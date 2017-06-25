@@ -15,25 +15,25 @@
 
     <div class="row">
         <h4>
-            Categories
-            <a href="{{route('admin.category.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+            Permissions
+            <a href="{{route('admin.permission.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
         </h4>
 
         <ul class="collapsible" data-collapsible="expandable">
-            @foreach($categories as $category)
+            @foreach($permissions as $permission)
 
                 <li>
                     <div class="collapsible-header truncate">
-                        {{ $category->name }}
-                        <a class="teal-text text-darken-1 right edit"  href="{{ route('admin.category.edit', $category->id) }}" title="Edit category">
+                        {{ $permission->name }}
+                        <a class="teal-text text-darken-1 right edit"  href="{{ route('admin.permission.edit', $permission->id) }}" title="Edit permission">
                             <i class="material-icons">edit</i>
                         </a>
 
-                        <a class="blue-text text-lighten-2 right view" href="{{ route('admin.category.show', $category->id) }}" target="_blank" title="View category">
+                        <a class="blue-text text-lighten-2 right view" href="{{ route('admin.permission.show', $permission->id) }}" target="_blank" title="View permission">
                             <i class="material-icons">open_in_new</i>
                         </a>
                     </div>
-                    <div class="collapsible-body grey lighten-4">{{$category->name}}</div>
+                    <div class="collapsible-body grey lighten-4">{{$permission->name}}</div>
                 </li>
 
             @endforeach

@@ -19,8 +19,8 @@
 
     <div class="row">
         <div class="col s12 left-align">
-            <a href="{{route('articles.edit', $article->id)}}" class="waves-effect waves-light btn"><i class="material-icons left">mode_edit</i>Edit</a>
-            <form method="post" action="{{route('articles.destroy', $article->id)}}" style="display: inline;">
+            <a href="{{route('admin.article.edit', $article->id)}}" class="waves-effect waves-light btn"><i class="material-icons left">mode_edit</i>Edit</a>
+            <form method="post" action="{{route('admin.article.destroy', $article->id)}}" style="display: inline;">
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="DELETE">
                 <button class="btn waves-effect waves-light" type="submit" name="action">Delete
@@ -33,12 +33,18 @@
         <div class="col s12">
             <h4>{{$article->title}}
                 @if($category)
-                    <a href="{{route('categories.show', $category->id)}}" class="category">
+                    <a href="{{route('admin.category.show', $category->id)}}" class="category">
                         <i class="material-icons">link</i>
                         {{$category->name}}
                     </a>
                 @endif
             </h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <h6>{{$article->author->name}}</h6>
         </div>
     </div>
 

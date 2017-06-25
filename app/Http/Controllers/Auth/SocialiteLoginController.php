@@ -100,6 +100,12 @@ class SocialiteLoginController extends Controller{
 
             //create new socialite record and assign to a user
             $this->appendSocialiteToUser($user, $provider);
+        }else{
+            if($user->socialite){
+                $socialite = $user->socialite;
+                $socialite->provider = $provider;
+                $socialite->save();
+            }
         }
 
         Auth::login($user);
@@ -126,6 +132,7 @@ class SocialiteLoginController extends Controller{
         $socialite = new \App\Socialite();
 
         $socialite->provider = $provider;
+        $socialite->original_provider = $provider;
 
         $user->socialite()->save($socialite);
     }

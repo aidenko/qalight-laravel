@@ -19,24 +19,27 @@ Route::get('article', 'ArticleController@index');
 
 
 
-Route::middleware(['auth'])->prefix('admin')->group(function(){
-    Route::get('/', 'Admin\AdminController@index')->name('admin');
+Route::middleware(['auth'])->prefix('admin')->namespace('Admin')->group(function(){
+    Route::get('/', 'AdminController@index')->name('admin');
 
-    Route::resource('articles', 'Admin\ArticleController');
-    Route::resource('tags', 'Admin\TagController');
-    Route::resource('categories', 'Admin\CategoryController');
-    Route::resource('users', 'Admin\UserController');
+    foreach(array('article', 'tag', 'category', 'user', 'role', 'permission') as $path){
+        Route::resource($path, ucfirst($path).'Controller', ['except' => ['index'], 'as' => 'admin']);
+        Route::get(str_plural($path).'/{from?}/{amount?}', ucfirst($path).'Controller@list')->name('admin.'.str_plural($path).'.list');
+    }
 });
+
+
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('auth/github', 'Auth\SocialiteLoginController@redirectToGithubAuth')->name('github.auth');
-Route::get('auth/github/callback', 'Auth\SocialiteLoginController@handleGithubCallback')->name('github.auth.callback');
 
-Route::get('auth/facebook', 'Auth\SocialiteLoginController@redirectToFacebookAuth')->name('facebook.auth');
-Route::get('auth/facebook/callback', 'Auth\SocialiteLoginController@handleFacebookCallback')->name('facebook.auth.callback');
-
-Route::get('auth/google', 'Auth\SocialiteLoginController@redirectToGoogleAuth')->name('google.auth');
-Route::get('auth/google/callback', 'Auth\SocialiteLoginController@handleGoogleCallback')->name('google.auth.callback');
+foreach(array('github', 'facebook', 'google') as $provider) {
+    Route::namespace('Auth')->prefix('auth')->group(function() use ($provider){
+        Route::get($provider, 'SocialiteLoginController@redirectTo'.ucfirst($provider).'Auth')
+            ->name('auth.'.$provider);
+        Route::get($provider.'/callback', 'SocialiteLoginController@handle'.ucfirst($provider).'Callback')
+            ->name('auth.'.$provider.'.callback');
+    });
+}

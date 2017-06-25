@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Http\Requests\Admin\StoreUserRequest;
+use App\Role;
 use App\User;
 use App\Http\Controllers\Controller;
 
@@ -13,7 +14,7 @@ class UserController extends Controller{
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function list() {
         return view('themes.admin.html.user.users', ['users' => User::all()]);
     }
 
@@ -23,7 +24,9 @@ class UserController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.user.new');
+        return view('themes.admin.html.user.new', [
+            'roles' => Role::all()
+        ]);
     }
 
     /**
@@ -35,7 +38,9 @@ class UserController extends Controller{
     public function store(StoreUserRequest $request) {
         $user = User::create($request->all());
 
-        return redirect()->route('users.show', $user->id);
+        $user->roles()->sync($request->roles, false);
+
+        return redirect()->route('admin.user.show', $user->id);
     }
 
     /**
@@ -55,7 +60,14 @@ class UserController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        return view('themes.admin.html.user.edit')->withUser(User::find($id));
+
+        $user = User::find($id);
+
+        return view('themes.admin.html.user.edit', [
+            'user' => $user,
+            'roles' => Role::all(),
+            'user_roles' => $user->roles->pluck('id')
+        ]);
     }
 
     /**
@@ -70,11 +82,12 @@ class UserController extends Controller{
 
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = bcrypt($request->password);
+        $user->password = $request->password;
+        $user->roles()->sync($request->roles);
 
         $user->save();
 
-        return redirect()->route('users.show', $id);
+        return redirect()->route('admin.user.show', $id);
     }
 
     /**
@@ -86,6 +99,6 @@ class UserController extends Controller{
     public function destroy($id) {
         User::destroy($id);
 
-        return redirect()->route('user.index');
+        return redirect()->route('admin.users.list');
     }
 }

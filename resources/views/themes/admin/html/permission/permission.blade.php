@@ -29,8 +29,8 @@
 
     <div class="row">
         <div class="col s12 left-align">
-            <a href="{{route('admin.category.edit', $category->id)}}" class="waves-effect waves-light btn"><i class="material-icons left">mode_edit</i>Edit</a>
-            <form method="post" action="{{route('admin.category.destroy', $category->id)}}" style="display: inline;">
+            <a href="{{route('admin.permission.edit', $permission->id)}}" class="waves-effect waves-light btn"><i class="material-icons left">mode_edit</i>Edit</a>
+            <form method="post" action="{{route('admin.permission.destroy', $permission->id)}}" style="display: inline;">
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="DELETE">
                 <button class="btn waves-effect waves-light" type="submit" name="action">Delete
@@ -38,16 +38,17 @@
                 </button>
             </form>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col s12">
-            @if($parent)
-                <a class="parent" href="{{route('admin.category.show', $parent->id)}}"><i class="material-icons">call_missed</i><span>{{$parent->name}}</span></a>
-            @endif
-            <h4>{{$category->name}}</h4>
+        <div class="row">
+            <div class="col s12">
+                <div class="card grey darken-2">
+                    <div class="card-content white-text">
+                        <span class="card-title">Name</span>
+                        {{$permission->name}}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
 
 @stop

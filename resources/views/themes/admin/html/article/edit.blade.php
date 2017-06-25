@@ -48,7 +48,7 @@
 
             <h2>Edit article</h2>
 
-            <form class="col s12" method="post" action="{{ route('articles.update', $article->id) }}">
+            <form class="col s12" method="post" action="{{ route('admin.article.update', $article->id) }}">
 
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="PUT">
@@ -62,6 +62,17 @@
                             @endforeach
                         </select>
                         <label>Parent category</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select name="author_id">
+                            @foreach ($authors as $author)
+                                <option value="{{$author->id}}"{{$author->id == $article->author_id ? 'selected' : ''}}>{{$author->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Author</label>
                     </div>
                 </div>
 

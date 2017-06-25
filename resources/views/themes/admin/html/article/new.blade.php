@@ -48,7 +48,7 @@
 
             <h2>New article</h2>
 
-            <form class="col s12" method="post" action="{{ route('articles.store') }}">
+            <form class="col s12" method="post" action="{{ route('admin.article.store') }}">
 
                 {{csrf_field()}}
 
@@ -61,6 +61,17 @@
                             @endforeach
                         </select>
                         <label>Parent category</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select name="author_id">
+                            @foreach ($authors as $author)
+                                <option value="{{$author->id}}"{{$author->id == $user->id ? 'selected' : ''}}>{{$author->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Author</label>
                     </div>
                 </div>
 
