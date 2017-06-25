@@ -24,7 +24,7 @@ Route::middleware(['auth'])->prefix('admin')->namespace('Admin')->group(function
 
     foreach(array('article', 'tag', 'category', 'user', 'role', 'permission') as $path){
         Route::resource($path, ucfirst($path).'Controller', ['except' => ['index'], 'as' => 'admin']);
-        Route::get(str_plural($path).'/{from}/{amount}', ucfirst($path).'Controller@list')->name('admin.'.str_plural($path).'.list');
+        Route::get(str_plural($path).'/{from?}/{amount?}', ucfirst($path).'Controller@list')->name('admin.'.str_plural($path).'.list');
     }
 });
 

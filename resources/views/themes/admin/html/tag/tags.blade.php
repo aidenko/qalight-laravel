@@ -24,7 +24,7 @@
         <div class="col s12">
             <h4>
                 Tags
-                <a href="{{route('tag.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+                <a href="{{route('admin.tag.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
             </h4>
 
             <br>
@@ -32,7 +32,7 @@
 
                 @foreach($tags as $tag)
 
-                    <a href="{{ route('tag.show', $tag->id) }}" target="_blank">
+                    <a href="{{ route('admin.tag.show', $tag->id) }}" target="_blank">
                         <div class="chip">
                             {{ $tag->name }}
                         </div>

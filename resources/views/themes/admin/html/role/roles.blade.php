@@ -16,7 +16,7 @@
     <div class="row">
         <h4>
             Roles
-            <a href="{{route('role.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+            <a href="{{route('admin.role.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
         </h4>
 
         <ul class="collapsible" data-collapsible="expandable">
@@ -25,11 +25,11 @@
                 <li>
                     <div class="collapsible-header truncate">
                         {{ $role->name }}
-                        <a class="teal-text text-darken-1 right edit"  href="{{ route('role.edit', $role->id) }}" title="Edit role">
+                        <a class="teal-text text-darken-1 right edit"  href="{{ route('admin.role.edit', $role->id) }}" title="Edit role">
                             <i class="material-icons">edit</i>
                         </a>
 
-                        <a class="blue-text text-lighten-2 right view" href="{{ route('role.show', $role->id) }}" target="_blank" title="View role">
+                        <a class="blue-text text-lighten-2 right view" href="{{ route('admin.role.show', $role->id) }}" target="_blank" title="View role">
                             <i class="material-icons">open_in_new</i>
                         </a>
                     </div>

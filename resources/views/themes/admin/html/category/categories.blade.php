@@ -16,7 +16,7 @@
     <div class="row">
         <h4>
             Categories
-            <a href="{{route('category.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+            <a href="{{route('admin.category.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
         </h4>
 
         <ul class="collapsible" data-collapsible="expandable">
@@ -25,11 +25,11 @@
                 <li>
                     <div class="collapsible-header truncate">
                         {{ $category->name }}
-                        <a class="teal-text text-darken-1 right edit"  href="{{ route('category.edit', $category->id) }}" title="Edit category">
+                        <a class="teal-text text-darken-1 right edit"  href="{{ route('admin.category.edit', $category->id) }}" title="Edit category">
                             <i class="material-icons">edit</i>
                         </a>
 
-                        <a class="blue-text text-lighten-2 right view" href="{{ route('category.show', $category->id) }}" target="_blank" title="View category">
+                        <a class="blue-text text-lighten-2 right view" href="{{ route('admin.category.show', $category->id) }}" target="_blank" title="View category">
                             <i class="material-icons">open_in_new</i>
                         </a>
                     </div>
