@@ -34,7 +34,7 @@ class CategoryController extends Controller{
     public function store(CategoryRequest $request) {
         $category = $this->save($request);
 
-        return redirect()->route('categories.show', $category->id);
+        return redirect()->route('category.show', $category->id);
     }
 
     /**
@@ -81,7 +81,7 @@ class CategoryController extends Controller{
 
         $this->save($request, $id);
 
-        return redirect()->route('categories.show', $id);
+        return redirect()->route('category.show', $id);
     }
 
     /**
@@ -93,7 +93,7 @@ class CategoryController extends Controller{
     public function destroy($id) {
         Category::destroy($id);
 
-        return redirect()->route('categories.index');
+        return redirect()->route('category.index');
     }
 
     /**

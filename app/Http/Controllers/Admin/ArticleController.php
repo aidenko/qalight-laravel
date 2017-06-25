@@ -49,7 +49,7 @@ class ArticleController extends Controller{
         $article = $this->save($request);
         $article->tags()->sync($request->tags);
 
-        return redirect()->route('articles.show', $article->id);
+        return redirect()->route('article.show', $article->id);
     }
 
     /**
@@ -102,7 +102,7 @@ class ArticleController extends Controller{
 
         $this->save($request, $id)->tags()->sync($request->tags);
 
-        return redirect()->route('articles.show', $id);
+        return redirect()->route('article.show', $id);
     }
 
     /**
@@ -114,7 +114,7 @@ class ArticleController extends Controller{
     public function destroy($id) {
         Article::destroy($id);
 
-        return redirect()->route('articles.index');
+        return redirect()->route('article.index');
     }
 
     /**

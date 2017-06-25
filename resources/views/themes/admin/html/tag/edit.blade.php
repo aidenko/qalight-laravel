@@ -24,7 +24,7 @@
                 </div>
             @endif
 
-            <form class="col s12" method="post" action="{{ route('tags.update', $tag->id) }}">
+            <form class="col s12" method="post" action="{{ route('tag.update', $tag->id) }}">
 
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="PUT">

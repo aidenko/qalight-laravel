@@ -27,7 +27,7 @@
 
             <h2>Edit User</h2>
 
-            <form class="col s12" method="post" action="{{ route('users.update', $user->id) }}">
+            <form class="col s12" method="post" action="{{ route('user.update', $user->id) }}">
 
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="PUT">

@@ -29,7 +29,7 @@
 
             <h2>Edit category</h2>
 
-            <form class="col s12" method="post" action="{{ route('categories.store') }}">
+            <form class="col s12" method="post" action="{{ route('category.store') }}">
 
                 {{csrf_field()}}
 

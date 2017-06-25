@@ -28,7 +28,7 @@
 
             <h2>Edit category</h2>
 
-            <form class="col s12" method="post" action="{{ route('categories.update', $category->id) }}">
+            <form class="col s12" method="post" action="{{ route('category.update', $category->id) }}">
 
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="PUT">

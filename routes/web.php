@@ -22,12 +22,12 @@ Route::get('article', 'ArticleController@index');
 Route::middleware(['auth'])->prefix('admin')->group(function(){
     Route::get('/', 'Admin\AdminController@index')->name('admin');
 
-    Route::resource('articles', 'Admin\ArticleController');
-    Route::resource('tags', 'Admin\TagController');
-    Route::resource('categories', 'Admin\CategoryController');
-    Route::resource('users', 'Admin\UserController');
-    Route::resource('roles', 'Admin\RoleController');
-    Route::resource('permissions', 'Admin\PermissionController');
+    Route::resource('article', 'Admin\ArticleController')->except('index');
+    Route::resource('tag', 'Admin\TagController');
+    Route::resource('category', 'Admin\CategoryController');
+    Route::resource('user', 'Admin\UserController');
+    Route::resource('role', 'Admin\RoleController');
+    Route::resource('permission', 'Admin\PermissionController');
 });
 
 Auth::routes();

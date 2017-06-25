@@ -32,7 +32,7 @@ class TagController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function store(TagRequest $request) {
-        return redirect()->route('tags.show', $this->save($request)->id);
+        return redirect()->route('tag.show', $this->save($request)->id);
     }
 
     /**
@@ -66,7 +66,7 @@ class TagController extends Controller{
 
         $this->save($request, $id);
 
-        return redirect()->route('tags.show', $id);
+        return redirect()->route('tag.show', $id);
     }
 
     /**
@@ -78,7 +78,7 @@ class TagController extends Controller{
     public function destroy($id) {
         Tag::destroy($id);
 
-        return redirect()->route('tags.index');
+        return redirect()->route('tag.index');
     }
 
     /**

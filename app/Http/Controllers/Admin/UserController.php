@@ -40,7 +40,7 @@ class UserController extends Controller{
 
         $user->roles()->sync($request->roles, false);
 
-        return redirect()->route('users.show', $user->id);
+        return redirect()->route('user.show', $user->id);
     }
 
     /**
@@ -87,7 +87,7 @@ class UserController extends Controller{
 
         $user->save();
 
-        return redirect()->route('users.show', $id);
+        return redirect()->route('user.show', $id);
     }
 
     /**

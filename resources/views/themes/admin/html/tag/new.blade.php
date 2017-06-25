@@ -23,7 +23,7 @@
                 </div>
             @endif
 
-            <form class="col s12" method="post" action="{{ route('tags.store') }}">
+            <form class="col s12" method="post" action="{{ route('tag.store') }}">
 
                 {{csrf_field()}}
                 <div class="row">

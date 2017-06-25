@@ -28,7 +28,7 @@
 
             <h2>Edit permission</h2>
 
-            <form class="col s12" method="post" action="{{ route('permissions.update', $permission->id) }}">
+            <form class="col s12" method="post" action="{{ route('permission.update', $permission->id) }}">
 
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="PUT">
