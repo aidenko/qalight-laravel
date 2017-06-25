@@ -49,6 +49,16 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col s12">
+                <div class="card grey lighten-4">
+                    <div class="card-content">
+                        {{$permission->description}}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 @stop

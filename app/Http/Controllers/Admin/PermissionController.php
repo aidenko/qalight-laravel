@@ -69,6 +69,7 @@ class PermissionController extends Controller{
         $permission = Permission::find($id);
 
         $permission->name = $request->name;
+        $permission->description = $request->input('description');
 
         $permission->save();
 

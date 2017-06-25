@@ -40,6 +40,12 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea name="description" class="materialize-textarea" id="description">{{$permission->description}}</textarea>
+                        <label for="description">Description</label>
+                    </div>
+                </div>
                 
                 <div class="row">
                     <br>
