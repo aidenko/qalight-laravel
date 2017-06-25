@@ -20,7 +20,7 @@ class ArticleController extends Controller{
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function list($from = 0, $amount = 10) {
         return view('themes.admin.html.article.articles', ['articles' => Article::all()]);
     }
 
@@ -49,7 +49,7 @@ class ArticleController extends Controller{
         $article = $this->save($request);
         $article->tags()->sync($request->tags);
 
-        return redirect()->route('articles.show', $article->id);
+        return redirect()->route('admin.article.show', $article->id);
     }
 
     /**
@@ -102,7 +102,7 @@ class ArticleController extends Controller{
 
         $this->save($request, $id)->tags()->sync($request->tags);
 
-        return redirect()->route('articles.show', $id);
+        return redirect()->route('admin.article.show', $id);
     }
 
     /**
@@ -114,7 +114,7 @@ class ArticleController extends Controller{
     public function destroy($id) {
         Article::destroy($id);
 
-        return redirect()->route('articles.index');
+        return redirect()->route('admin.articles');
     }
 
     /**

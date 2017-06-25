@@ -14,7 +14,7 @@ class UserController extends Controller{
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function list() {
         return view('themes.admin.html.user.users', ['users' => User::all()]);
     }
 
@@ -40,7 +40,7 @@ class UserController extends Controller{
 
         $user->roles()->sync($request->roles, false);
 
-        return redirect()->route('users.show', $user->id);
+        return redirect()->route('admin.user.show', $user->id);
     }
 
     /**
@@ -87,7 +87,7 @@ class UserController extends Controller{
 
         $user->save();
 
-        return redirect()->route('users.show', $id);
+        return redirect()->route('admin.user.show', $id);
     }
 
     /**
@@ -99,6 +99,6 @@ class UserController extends Controller{
     public function destroy($id) {
         User::destroy($id);
 
-        return redirect()->route('user.index');
+        return redirect()->route('admin.users.list');
     }
 }

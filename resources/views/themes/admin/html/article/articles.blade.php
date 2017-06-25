@@ -19,7 +19,7 @@
 
             <h4>
                 Articles
-                <a href="{{route('articles.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+                <a href="{{route('admin.article.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
             </h4>
 
             <ul class="collapsible" data-collapsible="expandable">
@@ -40,11 +40,11 @@
                                     </label>
                                 </div>
 
-                                <a class="blue-text text-lighten-2 view" href="{{ route('articles.show', $article->id) }}" target="_blank" title="View article">
+                                <a class="blue-text text-lighten-2 view" href="{{ route('admin.article.show', $article->id) }}" target="_blank" title="View article">
                                     <i class="material-icons">open_in_new</i>
                                 </a>
 
-                                <a class="teal-text text-darken-1 edit"  href="{{ route('articles.edit', $article->id) }}" title="Edit article">
+                                <a class="teal-text text-darken-1 edit"  href="{{ route('admin.article.edit', $article->id) }}" title="Edit article">
                                     <i class="material-icons">edit</i>
                                 </a>
 

@@ -27,7 +27,7 @@
 
             <h2>New user</h2>
 
-            <form class="col s12" method="post" action="{{ route('users.store') }}">
+            <form class="col s12" method="post" action="{{ route('admin.user.store') }}">
 
                 {{csrf_field()}}
 

@@ -29,8 +29,8 @@
 
     <div class="row">
         <div class="col s12 left-align">
-            <a href="{{route('permissions.edit', $permission->id)}}" class="waves-effect waves-light btn"><i class="material-icons left">mode_edit</i>Edit</a>
-            <form method="post" action="{{route('permissions.destroy', $permission->id)}}" style="display: inline;">
+            <a href="{{route('admin.permission.edit', $permission->id)}}" class="waves-effect waves-light btn"><i class="material-icons left">mode_edit</i>Edit</a>
+            <form method="post" action="{{route('admin.permission.destroy', $permission->id)}}" style="display: inline;">
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="DELETE">
                 <button class="btn waves-effect waves-light" type="submit" name="action">Delete

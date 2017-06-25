@@ -35,7 +35,7 @@ class PermissionController extends Controller{
     public function store(PermissionStoreRequest $request) {
         $permission = Permission::create($request->all());
 
-        return redirect()->route('permissions.show', $permission->id);
+        return redirect()->route('admin.permission.show', $permission->id);
     }
 
     /**
@@ -72,7 +72,7 @@ class PermissionController extends Controller{
 
         $permission->save();
 
-        return redirect()->route('permissions.show', $id);
+        return redirect()->route('admin.permission.show', $id);
     }
 
     /**
@@ -84,6 +84,6 @@ class PermissionController extends Controller{
     public function destroy($id) {
         Permission::destroy($id);
 
-        return redirect()->route('permissions.index');
+        return redirect()->route('admin.permissions.list');
     }
 }

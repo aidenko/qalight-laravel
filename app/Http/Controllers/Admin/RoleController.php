@@ -36,7 +36,7 @@ class RoleController extends Controller{
     public function store(StoreRoleRequest $request) {
         $role = $this->save($request);
 
-        return redirect()->route('roles.show', $role->id);
+        return redirect()->route('admin.role.show', $role->id);
     }
 
     /**
@@ -80,7 +80,7 @@ class RoleController extends Controller{
     public function update(UpdateRoleRequest $request, $id) {
         $this->save($request, $id);
 
-        return redirect()->route('roles.show', $id);
+        return redirect()->route('admin.role.show', $id);
     }
 
     /**
@@ -92,7 +92,7 @@ class RoleController extends Controller{
     public function destroy($id) {
         Role::destroy($id);
 
-        return redirect()->route('roles.index');
+        return redirect()->route('admin.roles.list');
     }
 
     /**

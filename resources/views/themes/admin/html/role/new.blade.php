@@ -28,7 +28,7 @@
 
             <h2>New Role</h2>
 
-            <form class="col s12" method="post" action="{{ route('roles.store') }}">
+            <form class="col s12" method="post" action="{{ route('admin.role.store') }}">
 
                 {{csrf_field()}}
 
