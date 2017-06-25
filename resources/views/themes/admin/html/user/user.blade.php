@@ -10,8 +10,8 @@
 
     <div class="row">
         <div class="col s12 left-align">
-            <a href="{{route('users.edit', $user->id)}}" class="waves-effect waves-light btn"><i class="material-icons left">mode_edit</i>Edit</a>
-            <form method="post" action="{{route('users.destroy', $user->id)}}" style="display: inline;">
+            <a href="{{route('admin.user.edit', $user->id)}}" class="waves-effect waves-light btn"><i class="material-icons left">mode_edit</i>Edit</a>
+            <form method="post" action="{{route('admin.user.destroy', $user->id)}}" style="display: inline;">
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="DELETE">
                 <button class="btn waves-effect waves-light" type="submit" name="action">Delete

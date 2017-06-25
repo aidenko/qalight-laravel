@@ -48,7 +48,7 @@
 
             <h2>Edit article</h2>
 
-            <form class="col s12" method="post" action="{{ route('articles.update', $article->id) }}">
+            <form class="col s12" method="post" action="{{ route('admin.article.update', $article->id) }}">
 
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="PUT">

@@ -28,7 +28,7 @@
 
             <h2>Edit role</h2>
 
-            <form class="col s12" method="post" action="{{ route('roles.update', $role->id) }}">
+            <form class="col s12" method="post" action="{{ route('admin.role.update', $role->id) }}">
 
                 {{csrf_field()}}
                 <input name="_method" type="hidden" value="PUT">

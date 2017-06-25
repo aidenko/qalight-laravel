@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AdminController extends Controller
+class DashboardController extends Controller
 {
-
-    protected $loginPath = 'admin/login';
 
     /**
      * Show the application dashboard.
@@ -17,6 +15,6 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('themes.admin.html.auth.home');
+        return view('themes.admin.html.dashboard.dashboard');
     }
 }

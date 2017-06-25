@@ -28,7 +28,7 @@
 
             <h2>New Permission</h2>
 
-            <form class="col s12" method="post" action="{{ route('permissions.store') }}">
+            <form class="col s12" method="post" action="{{ route('admin.permission.store') }}">
 
                 {{csrf_field()}}
 
