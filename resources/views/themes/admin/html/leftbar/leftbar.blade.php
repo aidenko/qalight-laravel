@@ -15,4 +15,7 @@
     <li>
         <a href="{{ route('roles.index') }}">Roles</a>
     </li>
+    <li>
+        <a href="{{ route('permissions.index') }}">Permissions</a>
+    </li>
 </ul>

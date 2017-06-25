@@ -27,6 +27,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function(){
     Route::resource('categories', 'Admin\CategoryController');
     Route::resource('users', 'Admin\UserController');
     Route::resource('roles', 'Admin\RoleController');
+    Route::resource('permissions', 'Admin\PermissionController');
 });
 
 Auth::routes();
