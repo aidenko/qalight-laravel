@@ -37,6 +37,8 @@ Route::prefix('admin')->namespace('Admin\Auth')->group(function(){
     Route::get('login', 'LoginController@showLoginForm')->name('admin.login');
 
     Route::post('login', 'LoginController@login');
+
+    Route::post('logout', 'LoginController@logout')->name('admin.logout');
 });
 
 Route::middleware(['admin'])->prefix('admin')->namespace('Admin')->group(function() {
