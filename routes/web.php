@@ -11,35 +11,39 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function() {
     return view('welcome');
 });
 
 Route::get('article', 'ArticleController@index');
 
 
-
-Route::middleware(['auth'])->prefix('admin')->namespace('Admin')->group(function(){
-    Route::get('/', 'AdminController@index')->name('admin');
-
-    foreach(array('article', 'tag', 'category', 'user', 'role', 'permission') as $path){
-        Route::resource($path, ucfirst($path).'Controller', ['except' => ['index'], 'as' => 'admin']);
-        Route::get(str_plural($path).'/{from?}/{amount?}', ucfirst($path).'Controller@list')->name('admin.'.str_plural($path).'.list');
-    }
-});
-
-
-
 Auth::routes();
+
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 foreach(array('github', 'facebook', 'google') as $provider) {
-    Route::namespace('Auth')->prefix('auth')->group(function() use ($provider){
+    Route::namespace('Auth')->prefix('auth')->group(function() use ($provider) {
         Route::get($provider, 'SocialiteLoginController@redirectTo'.ucfirst($provider).'Auth')
             ->name('auth.'.$provider);
         Route::get($provider.'/callback', 'SocialiteLoginController@handle'.ucfirst($provider).'Callback')
             ->name('auth.'.$provider.'.callback');
     });
 }
+
+
+Route::prefix('admin')->namespace('Admin\Auth')->group(function(){
+    Route::get('login', 'LoginController@showLoginForm')->name('admin.login');
+
+    Route::post('login', 'LoginController@login');
+});
+
+Route::middleware(['admin'])->prefix('admin')->namespace('Admin')->group(function() {
+    Route::get('/', 'DashboardController@index')->name('admin');
+
+    foreach(array('article', 'tag', 'category', 'user', 'role', 'permission') as $path) {
+        Route::resource($path, ucfirst($path).'Controller', ['except' => ['index'], 'as' => 'admin']);
+        Route::get(str_plural($path).'/{from?}/{amount?}', ucfirst($path).'Controller@list')->name('admin.'.str_plural($path).'.list');
+    }
+});
