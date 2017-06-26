@@ -60,7 +60,7 @@
                                 <option value="{{$c->id}}">{{$c->name}}</option>
                             @endforeach
                         </select>
-                        <label>Parent category</label>
+                        <label>Category</label>
                     </div>
                 </div>
 

@@ -24,10 +24,9 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:255',
-            'summary' => 'required',
+            'title' => 'required|max:256',
             'article' => 'required',
-            'author_id' => 'required|exists:users,id'
+            'category_id' => 'nullable|exists:categories,id'
         ];
     }
 }

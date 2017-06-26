@@ -132,7 +132,6 @@ class ArticleController extends Controller{
         $article->title = $request->title;
         $article->summary = $request->summary;
         $article->content = $request->article;
-        $article->slug = str_slug(uniqid().'-'.$request->title);
         $article->active = (boolean)$request->active;
         $article->category_id = $request->category_id;
         $article->user_id = ($article->user_id === null ? Auth::user()->id : $article->user_id);

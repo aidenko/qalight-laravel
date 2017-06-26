@@ -2,11 +2,12 @@
 
 namespace App;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model{
-    use SoftDeletes;
+    use SoftDeletes, Sluggable;
 
     /**
      * The attributes that should be mutated to dates.
@@ -15,7 +16,7 @@ class Article extends Model{
      */
     protected $dates = ['deleted_at'];
 
-    public function category(){
+    public function category() {
         return $this->belongsTo('App\Category');
     }
 
@@ -23,11 +24,21 @@ class Article extends Model{
         return $this->morphToMany('App\Tag', 'taggable');
     }
 
-    public function user(){
+    public function user() {
         return $this->belongsTo('App\User');
     }
 
-    public function  author(){
+    public function author() {
         return $this->belongsTo('App\User', 'author_id');
     }
+
+    public function sluggable() {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
+
+
 }

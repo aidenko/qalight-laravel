@@ -13,16 +13,20 @@ class CreateArticlesTable extends Migration{
     public function up() {
         Schema::create('articles', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('title', 255);
-            $table->string('slug', 255)->unique();
-            $table->text('summary');
+            $table->string('title', 256);
+            $table->string('slug', 256)->unique();
+            $table->text('summary')->nullable();
             $table->text('content');
             $table->boolean('active')->default(false);
-            $table->integer('category_id')->unsigned()->nullable();
+            $table->integer('category_id')->unsigned()->nullable()->index();
+            $table->integer('user_id')->unsigned()->index();
+            $table->integer('author_id')->unsigned()->index();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
