@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Http\Requests\Admin\StoreUserRequest;
+use App\Permission;
 use App\Role;
 use App\User;
 use App\Http\Controllers\Controller;
@@ -50,7 +51,13 @@ class UserController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        return view('themes.admin.html.user.user', ['user' => User::find($id)]);
+
+        $user = User::find($id);
+
+        return view('themes.admin.html.user.user', [
+            'user' => $user,
+            'permissions' => $user->permissions()
+        ]);
     }
 
     /**
@@ -66,7 +73,10 @@ class UserController extends Controller{
         return view('themes.admin.html.user.edit', [
             'user' => $user,
             'roles' => Role::all(),
-            'user_roles' => $user->roles->pluck('id')
+            'user_roles' => $user->roles->pluck('id'),
+            'permissions' => Permission::all(),
+            'rp' => $user->role_permissions()->pluck('id'),
+            'up' => $user->immediate_permissions->keyBy('id')
         ]);
     }
 
@@ -84,6 +94,16 @@ class UserController extends Controller{
         $user->email = $request->email;
         $user->password = $request->password;
         $user->roles()->sync($request->roles);
+
+        $permissions = [];
+
+        foreach($request->input('p_incl', []) as $p)
+            $permissions[$p] = ['include' => true];
+
+        foreach($request->input('p_excl', []) as $p)
+            $permissions[$p] = ['include' => false];
+
+        $user->immediate_permissions()->sync($permissions);
 
         $user->save();
 

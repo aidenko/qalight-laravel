@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable{
@@ -45,5 +45,38 @@ class User extends Authenticatable{
 
     public function authoredArticles() {
         return $this->hasMany('App\Article', 'author_id');
+    }
+
+    public function immediate_permissions() {
+        return $this->belongsToMany('App\Permission')->withPivot('include');
+    }
+
+    public function role_permissions() {
+        $permissions = [];
+
+        foreach($this->roles as $role)
+            $permissions = array_merge($permissions, $role->permissions->pluck('id')->toArray());
+
+        return Permission::whereIn('id', $permissions)->get();
+    }
+
+    public function permissions() {
+
+        $permissions = $this->immediate_permissions;
+
+        $exclude = [];
+        $include = [];
+
+        foreach($permissions as $p) {
+            if($p->pivot->include)
+                $include[] = $p;
+            else
+                $exclude[] = $p->id;
+        }
+
+        $permissions = $this->role_permissions()->whereNotIn('id', $exclude)->merge($include)->unique('id');
+
+        return $permissions;
+
     }
 }

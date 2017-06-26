@@ -62,6 +62,18 @@
                 </div>
 
                 <div class="row">
+                    <div class="input-field col s12">
+                        <select name="permissions[]" multiple>
+                            <option value="" disabled>Choose permissions</option>
+                            @foreach ($permissions as $permission)
+                                <option value="{{$permission->id}}">{{$permission->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Permissions</label>
+                    </div>
+                </div>
+
+                <div class="row">
                     <br>
                     <button class="btn waves-effect waves-light" type="submit" name="action">
                         Save

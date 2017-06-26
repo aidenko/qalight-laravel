@@ -5,7 +5,7 @@
 
 @section('file_js')
     <script>
-        jQuery('.edit, .view').click(function(event){
+        jQuery('.edit, .view').click(function (event) {
             event.stopPropagation();
         });
     </script>
@@ -25,7 +25,7 @@
                 <li>
                     <div class="collapsible-header truncate">
                         {{ $role->name }}
-                        <a class="teal-text text-darken-1 right edit"  href="{{ route('admin.role.edit', $role->id) }}" title="Edit role">
+                        <a class="teal-text text-darken-1 right edit" href="{{ route('admin.role.edit', $role->id) }}" title="Edit role">
                             <i class="material-icons">edit</i>
                         </a>
 
@@ -33,7 +33,10 @@
                             <i class="material-icons">open_in_new</i>
                         </a>
                     </div>
-                    <div class="collapsible-body grey lighten-4">{{$role->name}}</div>
+                    <div class="collapsible-body grey lighten-4">
+                        <h6>Permissions</h6>
+                        {{$role->permissions->pluck('name')->implode(', ')}}
+                    </div>
                 </li>
 
             @endforeach
