@@ -4,19 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePermissionsTable extends Migration{
+class CreateSlugsTable extends Migration{
     /**
      * Run the migrations.
      *
      * @return void
      */
     public function up() {
-        Schema::create('permissions', function(Blueprint $table) {
+        Schema::create('slugs', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique()->index();
-            $table->string('description', 1000)->nullable();
-            $table->timestamps();
-            $table->softDeletes();
+            $table->text('slug');
+            $table->integer('sluggable_id')->unsigned()->index();
+            $table->string('sluggable_type')->index();
         });
     }
 
@@ -26,6 +25,6 @@ class CreatePermissionsTable extends Migration{
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('slugs');
     }
 }

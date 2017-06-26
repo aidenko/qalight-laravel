@@ -25,8 +25,9 @@ class ArticleRequest extends FormRequest
     {
         return [
             'title' => 'required|max:255',
-            'summary' => 'required',
             'article' => 'required',
+            'category_id' => 'sometimes|required|exists:categories,id',
+            'user_id' => 'required|exists:users,id',
             'author_id' => 'required|exists:users,id'
         ];
     }
