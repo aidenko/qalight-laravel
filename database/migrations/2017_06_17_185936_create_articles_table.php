@@ -13,7 +13,8 @@ class CreateArticlesTable extends Migration{
     public function up() {
         Schema::create('articles', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('title', 255);
+            $table->string('title', 256);
+            $table->string('slug', 256)->unique();
             $table->text('summary')->nullable();
             $table->text('content');
             $table->boolean('active')->default(false);

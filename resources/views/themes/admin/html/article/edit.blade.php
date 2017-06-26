@@ -61,7 +61,7 @@
                                 <option value="{{$c->id}}"{{$article->category_id == $c->id ? ' selected' : ''}}>{{$c->name}}</option>
                             @endforeach
                         </select>
-                        <label>Parent category</label>
+                        <label>Category</label>
                     </div>
                 </div>
 
