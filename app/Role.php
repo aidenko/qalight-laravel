@@ -9,11 +9,10 @@ use Kalnoy\Nestedset\NodeTrait;
 class Role extends Model{
     use SoftDeletes, NodeTrait;
 
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['name'];
 
     public function setNameAttribute($value) {
         $this->attributes['name'] = $value;
-        $this->attributes['slug'] = str_slug($value);
     }
 
     public function users() {
@@ -26,5 +25,9 @@ class Role extends Model{
 
     public function parent() {
         return $this->belongsTo('App\Role', 'parent_id');
+    }
+
+    public function permissions() {
+        return $this->belongsToMany('App\Permission');
     }
 }

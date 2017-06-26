@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Permission extends Model{
     use SoftDeletes;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'description'];
+
+    public function roles() {
+        return $this->belongsToMany('App\Role');
+    }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreRoleRequest;
 use App\Http\Requests\Admin\UpdateRoleRequest;
+use App\Permission;
 use App\Role;
-use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RoleController extends Controller{
@@ -24,7 +25,10 @@ class RoleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.role.new', ['roles' => Role::all()]);
+        return view('themes.admin.html.role.new', [
+            'roles' => Role::all(),
+            'permissions' => Permission::all()
+        ]);
     }
 
     /**
@@ -35,6 +39,8 @@ class RoleController extends Controller{
      */
     public function store(StoreRoleRequest $request) {
         $role = $this->save($request);
+
+        $role->permissions()->sync($request->permissions, false);
 
         return redirect()->route('admin.role.show', $role->id);
     }
@@ -50,7 +56,8 @@ class RoleController extends Controller{
 
         return view('themes.admin.html.role.role',
             ['role' => $role,
-             'parent' => $role->parent
+             'parent' => $role->parent,
+             'permissions' => $role->permissions
             ]);
     }
 
@@ -66,7 +73,9 @@ class RoleController extends Controller{
         return view('themes.admin.html.role.edit',
             [
                 'role' => $role,
-                'roles' => Role::whereNotIn('id', array_merge([$id], $role->descendants->pluck('id')->toArray()))->get()
+                'roles' => Role::whereNotIn('id', array_merge([$id], $role->descendants->pluck('id')->toArray()))->get(),
+                'permissions' => Permission::all(),
+                'role_permissions' => $role->permissions->pluck('id')
             ]);
     }
 
@@ -78,7 +87,9 @@ class RoleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateRoleRequest $request, $id) {
-        $this->save($request, $id);
+        $role = $this->save($request, $id);
+
+        $role->permissions()->sync($request->permissions);
 
         return redirect()->route('admin.role.show', $id);
     }

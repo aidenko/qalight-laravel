@@ -21,7 +21,7 @@ class StoreRoleRequest extends FormRequest{
      */
     public function rules() {
         return [
-            'parent_id' => 'sometimes|exists:roles,id'
+            'parent_id' => 'nullable|exists:roles,id'
         ];
     }
 }

@@ -43,6 +43,23 @@
     <div class="row">
         <div class="col s12">
             <br>
+            <h4>Permissions</h4>
+
+            @if ($permissions->isEmpty())
+                No Permissions
+            @else
+                <div class="chips">
+                    @foreach($permissions as $permission)
+                        <div class="chip selected">{{$permission->name}}</div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <br>
             <h4>Roles</h4>
 
             @if ($user->roles->isEmpty())
