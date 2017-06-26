@@ -33,7 +33,7 @@
                             <i class="material-icons">open_in_new</i>
                         </a>
                     </div>
-                    <div class="collapsible-body grey lighten-4">{{$permission->name}}</div>
+                    <div class="collapsible-body grey lighten-4">{{$permission->description}}</div>
                 </li>
 
             @endforeach
