@@ -87,4 +87,8 @@ class User extends Authenticatable{
     public function isAdmin(){
         return $this->hasPermission('admin_access');
     }
+
+    public function isSuperAdmin(){
+        return $this->hasPermission('super_admin');
+    }
 }
