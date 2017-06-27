@@ -58,7 +58,7 @@
             @else
                 <div class="chips">
                     @foreach($permissions as $permission)
-                        <div class="chip selected">{{$permission->name}}</div>
+                        <div class="chip selected tooltipped" data-html="true" data-position="bottom" data-delay="500" data-tooltip="{{$permission->description}}">{{$permission->name}}</div>
                     @endforeach
                 </div>
             @endif
