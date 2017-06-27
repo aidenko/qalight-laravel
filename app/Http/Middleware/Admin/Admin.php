@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class Admin{
 
     public function handle($request, Closure $next) {
-        if(Auth::user() && Auth::check() /*&& Auth::user()->admin == 1*/){
+        if(Auth::user() && Auth::check() && Auth::user()->isAdmin()){
             return $next($request);
         }
 

@@ -62,6 +62,7 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <select name="roles[]" multiple>
+                            <option value="" disabled>Choose roles</option>
                             @foreach ($roles as $role)
                                 <option value="{{$role->id}}"{{$user_roles->contains($role->id) ? ' selected' : ''}}>{{$role->name}}</option>
                             @endforeach
