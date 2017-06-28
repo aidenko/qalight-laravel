@@ -69,14 +69,14 @@ class UserController extends Controller{
     public function edit($id) {
 
         $user = User::find($id);
-
+        
         return view('themes.admin.html.user.edit', [
             'user' => $user,
             'roles' => Role::all(),
             'user_roles' => $user->roles->pluck('id'),
             'permissions' => Permission::all(),
             'rp' => $user->role_permissions()->pluck('id'),
-            'up' => $user->immediate_permissions->keyBy('id')
+            'up' => $user->immediate_permissions->pluck('pivot.include', 'id')
         ]);
     }
 

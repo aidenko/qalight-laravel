@@ -96,13 +96,13 @@
                                     </td>
                                     <td>
                                         <p>
-                                            <input type="checkbox" id="ip-{{$p->id}}" name="p_incl[]" value="{{$p->id}}"{{$up->contains($p->id) && $up[$p->id]->pivot->include ? ' checked' : ''}}/>
+                                            <input type="checkbox" id="ip-{{$p->id}}" name="p_incl[]" value="{{$p->id}}"{{$up->has($p->id) && $up[$p->id] ? ' checked' : ''}}/>
                                             <label for="ip-{{$p->id}}"></label>
                                         </p>
                                     </td>
                                     <td>
                                         <p>
-                                            <input type="checkbox" id="ep-{{$p->id}}" name="p_excl[]" value="{{$p->id}}"{{$up->contains($p->id) && !$up[$p->id]->pivot->include ? ' checked' : ''}}/>
+                                            <input type="checkbox" id="ep-{{$p->id}}" name="p_excl[]" value="{{$p->id}}"{{$up->has($p->id) && !$up[$p->id] ? ' checked' : ''}}/>
                                             <label for="ep-{{$p->id}}"></label>
                                         </p>
                                     </td>
