@@ -18,6 +18,9 @@ class User extends Authenticatable{
         'name', 'email', 'password',
     ];
 
+    private $permissions = null;
+    private $role_permissions = null;
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -52,43 +55,51 @@ class User extends Authenticatable{
     }
 
     public function role_permissions() {
-        $permissions = [];
 
-        foreach($this->roles as $role)
-            $permissions = array_merge($permissions, $role->permissions->pluck('id')->toArray());
+        if($this->role_permissions === null){
 
-        return Permission::whereIn('id', $permissions)->get();
+            $permissions = [];
+
+            foreach($this->roles as $role)
+                $permissions = array_merge($permissions, $role->permissions->pluck('id')->toArray());
+
+            $this->role_permissions = Permission::whereIn('id', $permissions)->get();
+        }
+
+        return $this->role_permissions;
     }
 
     public function permissions() {
 
-        $permissions = $this->immediate_permissions;
+        if($this->permissions === null){
 
-        $exclude = [];
-        $include = [];
+            $permissions = $this->immediate_permissions;
 
-        foreach($permissions as $p) {
-            if($p->pivot->include)
-                $include[] = $p;
-            else
-                $exclude[] = $p->id;
+            $exclude = [];
+            $include = [];
+
+            foreach($permissions as $p) {
+                if($p->pivot->include)
+                    $include[] = $p;
+                else
+                    $exclude[] = $p->id;
+            }
+
+            $this->permissions = $this->role_permissions()->whereNotIn('id', $exclude)->merge($include)->unique('id');
         }
 
-        $permissions = $this->role_permissions()->whereNotIn('id', $exclude)->merge($include)->unique('id');
-
-        return $permissions;
-
+        return $this->permissions;
     }
 
-    public function hasPermission($permission){
+    public function hasPermission($permission) {
         return $this->permissions()->pluck('name')->contains($permission);
     }
 
-    public function isAdmin(){
+    public function isAdmin() {
         return $this->hasPermission('admin_access');
     }
 
-    public function isSuperAdmin(){
+    public function isSuperAdmin() {
         return $this->hasPermission('super_admin');
     }
 }
