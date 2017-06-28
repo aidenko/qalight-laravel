@@ -23,7 +23,7 @@ class ArticleController extends Controller{
      */
     public function list($from = 0, $amount = 10) {
 
-        if(Gate::allows('articles.viewList'))
+        if(Gate::allows('view.articles.list'))
             return view('themes.admin.html.article.articles', ['articles' => Article::all()]);
 
         return redirect()->route('admin');

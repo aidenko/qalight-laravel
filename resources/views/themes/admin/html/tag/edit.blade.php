@@ -11,19 +11,10 @@
 
     <div class="row">
         <div class="col s12">
+
+            @include('themes.admin.include.form-validation-errors')
+
             <h2>New article</h2>
-
-
-            @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
             <form class="col s12" method="post" action="{{ route('admin.tag.update', $tag->id) }}">
 
                 {{csrf_field()}}

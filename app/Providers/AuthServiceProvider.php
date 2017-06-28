@@ -33,8 +33,8 @@ class AuthServiceProvider extends ServiceProvider{
 
         Gate::resource('articles', 'ArticlePolicy');
 
-        Gate::define('articles.viewList', function(User $user) {
-            return $user->hasPermission('articles.viewList');
+        Gate::define('view.articles.list', function(User $user) {
+            return $user->hasPermission('view.articles.list');
         });
     }
 }

@@ -17,15 +17,7 @@
 
     <div class="row">
         <div class="col s12 left-align">
-            @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            @include('themes.admin.include.form-validation-errors')
 
             <h2>Edit category</h2>
 
