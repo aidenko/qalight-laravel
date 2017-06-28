@@ -79,4 +79,16 @@ class User extends Authenticatable{
         return $permissions;
 
     }
+
+    public function hasPermission($permission){
+        return $this->permissions()->pluck('name')->contains($permission);
+    }
+
+    public function isAdmin(){
+        return $this->hasPermission('admin_access');
+    }
+
+    public function isSuperAdmin(){
+        return $this->hasPermission('super_admin');
+    }
 }

@@ -9,6 +9,7 @@ use App\Tag;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * Class ArticleController
@@ -21,7 +22,11 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function list($from = 0, $amount = 10) {
-        return view('themes.admin.html.article.articles', ['articles' => Article::all()]);
+
+        if(Gate::allows('articles.viewList'))
+            return view('themes.admin.html.article.articles', ['articles' => Article::all()]);
+
+        return redirect()->route('admin');
     }
 
     /**
