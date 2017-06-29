@@ -5,7 +5,7 @@
 
 @section('file_js')
     <script>
-        jQuery('.active, .edit, .view, .delete').click(function(event){
+        jQuery('.active, .edit, .view, .delete').click(function (event) {
             event.stopPropagation();
         });
     </script>
@@ -19,7 +19,9 @@
 
             <h4>
                 Articles
-                <a href="{{route('admin.article.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+                @can('create', App\Article::class)
+                    <a href="{{route('admin.article.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+                @endcan
             </h4>
 
             <ul class="collapsible" data-collapsible="expandable">
@@ -39,17 +41,17 @@
                                         <span class="lever"></span>
                                     </label>
                                 </div>
-
-                                <a class="blue-text text-lighten-2 view" href="{{ route('admin.article.show', $article->id) }}" target="_blank" title="View article">
-                                    <i class="material-icons">open_in_new</i>
-                                </a>
-
-                                <a class="teal-text text-darken-1 edit"  href="{{ route('admin.article.edit', $article->id) }}" title="Edit article">
+                                @can('view', $article)
+                                    <a class="blue-text text-lighten-2 view" href="{{ route('admin.article.show', $article->id) }}" target="_blank" title="View article">
+                                        <i class="material-icons">open_in_new</i>
+                                    </a>
+                                @endcan
+                                <a class="teal-text text-darken-1 edit" href="{{ route('admin.article.edit', $article->id) }}" title="Edit article">
                                     <i class="material-icons">edit</i>
                                 </a>
 
                                 <span class="delete">
-                                    <input type="checkbox" id="article-{{$article->id}}" />
+                                    <input type="checkbox" id="article-{{$article->id}}"/>
                                     <label for="article-{{$article->id}}">&nbsp;</label>
                                 </span>
                             </div>

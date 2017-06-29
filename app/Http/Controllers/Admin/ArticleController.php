@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Article;
 use App\Category;
-use App\Http\Requests\Admin\ArticleRequest;
-use App\Tag;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Article\Store;
+use App\Http\Requests\Admin\Article\Update;
+use App\Tag;
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -23,10 +25,10 @@ class ArticleController extends Controller{
      */
     public function list($from = 0, $amount = 10) {
 
-        if(Gate::allows('view.articles.list'))
+        if(Gate::allows('articles.view.list'))
             return view('themes.admin.html.article.articles', ['articles' => Article::all()]);
 
-        return redirect()->route('admin');
+        return redirect()->route('admin.no-access');
     }
 
     /**
@@ -35,21 +37,26 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.article.new', array(
-            'tags' => Tag::all(),
-            'categories' => Category::all(),
-            'authors' => User::all(),
-            'user' => Auth::user()
-        ));
+        if(Gate::allows('articles.create')){
+            return view('themes.admin.html.article.new', array(
+                'tags' => Tag::all(),
+                'categories' => Category::all(),
+                'authors' => User::all(),
+                'user' => Auth::user()
+            ));
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\ArticleRequest $request
+     * @param  \App\Http\Requests\Admin\Article\Store $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ArticleRequest $request) {
+    public function store(Store $request) {
 
         $article = $this->save($request);
         $article->tags()->sync($request->tags);
@@ -67,12 +74,18 @@ class ArticleController extends Controller{
 
         $article = Article::find($id);
 
-        return view('themes.admin.html.article.article',
-            [
-                'article' => $article,
-                'tags' => $article->tags,
-                'category' => $article->category
-            ]);
+        //The very wierd bug that Gate::allows() does not work if a policy registered
+        if(Auth::user()->can('view', $article)){
+            return view('themes.admin.html.article.article',
+                [
+                    'article' => $article,
+                    'tags' => $article->tags,
+                    'category' => $article->category
+                ]);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -99,11 +112,11 @@ class ArticleController extends Controller{
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\ArticleRequest $request
+     * @param  \App\Http\Requests\Admin\Article\Update $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ArticleRequest $request, $id) {
+    public function update(Update $request, $id) {
 
         $this->save($request, $id)->tags()->sync($request->tags);
 
@@ -123,11 +136,11 @@ class ArticleController extends Controller{
     }
 
     /**
-     * @param  \App\Http\Requests\Admin\ArticleRequest $request
+     * @param  Request $request
      * @param null $id
      * @return Article
      */
-    private function save(ArticleRequest $request, $id = null) {
+    private function save(Request $request, $id = null) {
 
         if(is_null($id))
             $article = new Article();

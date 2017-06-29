@@ -14,7 +14,7 @@ class DashboardController extends Controller{
      */
     public function index() {
 
-        if(Gate::allows('view_admin_dashboard'))
+        if(Gate::allows('admin.view.dashboard'))
             return view('themes.admin.html.dashboard.dashboard');
         else
            return redirect('/');
