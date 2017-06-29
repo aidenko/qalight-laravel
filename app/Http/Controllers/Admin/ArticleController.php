@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Article;
 use App\Category;
-use App\Http\Requests\Admin\ArticleRequest;
-use App\Tag;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Article\Store;
+use App\Http\Requests\Admin\Article\Update;
+use App\Tag;
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -23,10 +25,10 @@ class ArticleController extends Controller{
      */
     public function list($from = 0, $amount = 10) {
 
-        if(Gate::allows('view.articles.list'))
+        if(Gate::allows('articles.view.list'))
             return view('themes.admin.html.article.articles', ['articles' => Article::all()]);
 
-        return redirect()->route('admin');
+        return redirect()->route('admin.no-access');
     }
 
     /**
@@ -35,26 +37,37 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.article.new', array(
-            'tags' => Tag::all(),
-            'categories' => Category::all(),
-            'authors' => User::all(),
-            'user' => Auth::user()
-        ));
+
+        if(Auth::user()->can('create', Article::class)){
+            return view('themes.admin.html.article.new', array(
+                'tags' => Tag::all(),
+                'categories' => Category::all(),
+                'authors' => User::all(),
+                'user' => Auth::user()
+            ));
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\ArticleRequest $request
+     * @param  \App\Http\Requests\Admin\Article\Store $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ArticleRequest $request) {
+    public function store(Store $request) {
 
-        $article = $this->save($request);
-        $article->tags()->sync($request->tags);
 
-        return redirect()->route('admin.article.show', $article->id);
+        if(Auth::user()->can('create', Article::class)){
+            $article = $this->save($request);
+            $article->tags()->sync($request->tags);
+
+            return redirect()->route('admin.article.show', $article->id);
+        }
+        else
+            return redirect()->route('admin.no-access');
     }
 
     /**
@@ -67,12 +80,18 @@ class ArticleController extends Controller{
 
         $article = Article::find($id);
 
-        return view('themes.admin.html.article.article',
-            [
-                'article' => $article,
-                'tags' => $article->tags,
-                'category' => $article->category
-            ]);
+        //The very wierd bug that Gate::allows() does not work if a policy registered
+        if(Auth::user()->can('view', $article)){
+            return view('themes.admin.html.article.article',
+                [
+                    'article' => $article,
+                    'tags' => $article->tags,
+                    'category' => $article->category
+                ]);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -84,30 +103,43 @@ class ArticleController extends Controller{
     public function edit($id) {
 
         $article = Article::find($id);
-        $tags = Tag::all();
 
-        return view('themes.admin.html.article.edit',
-            array(
-                'article' => $article,
-                'tags' => $tags,
-                'assigned' => $article->tags->pluck('id'),
-                'categories' => Category::all(),
-                'authors' => User::all()
-            ));
+        if(Auth::user()->can('update', $article)){
+            $tags = Tag::all();
+
+            return view('themes.admin.html.article.edit',
+                array(
+                    'article' => $article,
+                    'tags' => $tags,
+                    'assigned' => $article->tags->pluck('id'),
+                    'categories' => Category::all(),
+                    'authors' => User::all()
+                ));
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\ArticleRequest $request
+     * @param  \App\Http\Requests\Admin\Article\Update $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ArticleRequest $request, $id) {
+    public function update(Update $request, $id) {
 
-        $this->save($request, $id)->tags()->sync($request->tags);
+        $article = Article::find($id);
 
-        return redirect()->route('admin.article.show', $id);
+        if($article && Auth::user()->can('update', $article)){
+            $this->save($request, $article)->tags()->sync($request->tags);
+
+            return redirect()->route('admin.article.show', $id);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -117,29 +149,39 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        Article::destroy($id);
 
-        return redirect()->route('admin.articles');
+        $article = Article::find($id);
+
+        if($article && Auth::user()->can('delete', $article)){
+
+            Article::destroy($id);
+
+            return redirect()->route('admin.articles');
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
-     * @param  \App\Http\Requests\Admin\ArticleRequest $request
-     * @param null $id
+     * @param  Request $request
+     * @param null \App\Article $article
      * @return Article
      */
-    private function save(ArticleRequest $request, $id = null) {
+    private function save(Request $request, $article = null) {
 
-        if(is_null($id))
+        if(is_null($article))
             $article = new Article();
-        else
-            $article = Article::find($id);
 
         $article->title = $request->title;
         $article->summary = $request->summary;
         $article->content = $request->article;
         $article->active = (boolean)$request->active;
         $article->category_id = $request->category_id;
-        $article->user_id = ($article->user_id === null ? Auth::user()->id : $article->user_id);
+
+        if($article->user_id === null)
+            $article->user_id = Auth::user()->id;
+
         $article->author_id = $request->author_id;
 
         $article->save();

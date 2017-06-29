@@ -27,14 +27,10 @@ class AuthServiceProvider extends ServiceProvider{
     public function boot() {
         $this->registerPolicies();
 
-        Gate::define('view_admin_dashboard', function(User $user) {
-            return $user->hasPermission('view_admin_dashboard');
+        Gate::define('admin.view.dashboard', function(User $user) {
+            return $user->hasPermission('admin.view.dashboard');
         });
 
-        Gate::resource('articles', 'ArticlePolicy');
-
-        Gate::define('view.articles.list', function(User $user) {
-            return $user->hasPermission('view.articles.list');
-        });
+        Gate::define('articles.view.list', 'App\Policies\ArticlePolicy@viewList');
     }
 }

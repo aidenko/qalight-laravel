@@ -9,11 +9,20 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class ArticlePolicy{
     use HandlesAuthorization;
 
+    public function before(User $user) {
+        if($user->isSuperAdmin())
+            return true;
+    }
 
-//    public function before(User $user) {
-//        if($user->isSuperAdmin())
-//            return true;
-//    }
+    /**
+     * Determine whether the user can view the list of articles.
+     *
+     * @param  \App\User $user
+     * @return mixed
+     */
+    public function viewList(User $user) {
+        return $user->hasPermission('articles.view.list');
+    }
 
     /**
      * Determine whether the user can view the article.
@@ -23,7 +32,7 @@ class ArticlePolicy{
      * @return mixed
      */
     public function view(User $user, Article $article) {
-        //
+        return ($user->hasPermission('articles.view.any') || $article->isOwner($user));
     }
 
     /**
@@ -33,7 +42,7 @@ class ArticlePolicy{
      * @return mixed
      */
     public function create(User $user) {
-        //
+        return $user->hasPermission('articles.create');
     }
 
     /**
@@ -44,7 +53,8 @@ class ArticlePolicy{
      * @return mixed
      */
     public function update(User $user, Article $article) {
-        //
+        return ($user->hasPermission('articles.edit.any')
+            || ($user->hasPermission('articles.edit.own') && $user->isOwnerOf($article)));
     }
 
     /**
@@ -55,6 +65,7 @@ class ArticlePolicy{
      * @return mixed
      */
     public function delete(User $user, Article $article) {
-        //
+        return ($user->hasPermission('articles.delete.any')
+            || ($user->hasPermission('articles.delete.own') && $user->isOwnerOf($article)));
     }
 }

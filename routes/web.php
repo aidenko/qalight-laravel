@@ -33,7 +33,7 @@ foreach(array('github', 'facebook', 'google') as $provider) {
 }
 
 
-Route::prefix('admin')->namespace('Admin\Auth')->group(function(){
+Route::prefix('admin')->namespace('Admin\Auth')->group(function() {
     Route::get('login', 'LoginController@showLoginForm')->name('admin.login');
 
     Route::post('login', 'LoginController@login');
@@ -43,6 +43,7 @@ Route::prefix('admin')->namespace('Admin\Auth')->group(function(){
 
 Route::middleware(['admin'])->prefix('admin')->namespace('Admin')->group(function() {
     Route::get('/', 'DashboardController@index')->name('admin');
+    Route::get('no-access', 'NoAccessController@index')->name('admin.no-access');
 
     foreach(array('article', 'tag', 'category', 'user', 'role', 'permission') as $path) {
         Route::resource($path, ucfirst($path).'Controller', ['except' => ['index'], 'as' => 'admin']);
