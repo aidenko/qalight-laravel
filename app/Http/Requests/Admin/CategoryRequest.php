@@ -4,15 +4,13 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
-{
+class CategoryRequest extends FormRequest{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize() {
         return true;
     }
 
@@ -21,11 +19,10 @@ class CategoryRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             'name' => 'required|max:255',
-            'parent_id' => 'sometimes|exists:categories,id'
+            'parent_id' => 'nullable|exists:categories,id'
         ];
     }
 }

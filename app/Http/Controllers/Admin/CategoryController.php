@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Category;
-use App\Http\Requests\Admin\CategoryRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CategoryRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller{
     /**
@@ -13,7 +15,10 @@ class CategoryController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function list() {
-        return view('themes.admin.html.category.categories', ['categories' => Category::all()]);
+        if(Gate::allows('articles.view.list'))
+            return view('themes.admin.html.category.categories', ['categories' => Category::all()]);
+
+        return redirect()->route('admin.no-access');
     }
 
     /**
@@ -22,7 +27,12 @@ class CategoryController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.category.new', ['categories' => Category::all()]);
+        if(Auth::user()->can('create', Category::class)){
+            return view('themes.admin.html.category.new', ['categories' => Category::all()]);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -32,9 +42,14 @@ class CategoryController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function store(CategoryRequest $request) {
-        $category = $this->save($request);
 
-        return redirect()->route('admin.category.show', $category->id);
+        if(Auth::user()->can('create', Category::class)){
+            $category = $this->save($request);
+
+            return redirect()->route('admin.category.show', $category->id);
+        }
+        else
+            return redirect()->route('admin.no-access');
     }
 
     /**
@@ -47,10 +62,16 @@ class CategoryController extends Controller{
 
         $category = Category::find($id);
 
-        return view('themes.admin.html.category.category',
-            ['category' => $category,
-             'parent' => $category->parent
-            ]);
+        if(Auth::user()->can('view', $category)){
+
+            return view('themes.admin.html.category.category',
+                ['category' => $category,
+                 'parent' => $category->parent
+                ]);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -63,11 +84,17 @@ class CategoryController extends Controller{
 
         $category = Category::find($id);
 
-        return view('themes.admin.html.category.edit',
-            [
-                'category' => $category,
-                'categories' => Category::whereNotIn('id', array_merge([$id], $category->descendants->pluck('id')->toArray()))->get()
-            ]);
+        if(Auth::user()->can('update', $category)){
+
+            return view('themes.admin.html.category.edit',
+                [
+                    'category' => $category,
+                    'categories' => Category::whereNotIn('id', array_merge([$id], $category->descendants->pluck('id')->toArray()))->get()
+                ]);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -79,9 +106,17 @@ class CategoryController extends Controller{
      */
     public function update(CategoryRequest $request, $id) {
 
-        $this->save($request, $id);
+        $category = Category::find($id);
 
-        return redirect()->route('admin.category.show', $id);
+        if($category && Auth::user()->can('update', $category)){
+
+            $this->save($request, $category);
+
+            return redirect()->route('admin.category.show', $id);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -91,22 +126,29 @@ class CategoryController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        Category::destroy($id);
 
-        return redirect()->route('admin.categories.list');
+        $category = Category::find($id);
+
+        if($category && Auth::user()->can('delete', $category)){
+
+            Category::destroy($id);
+
+            return redirect()->route('admin.categories.list');
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
      * @param CategoryRequest $request
-     * @param null $id
+     * @param \App\Category $category
      * @return Category
      */
-    private function save(CategoryRequest $request, $id = null) {
+    private function save(CategoryRequest $request, $category = null) {
 
-        if(is_null($id))
+        if(is_null($category))
             $category = new Category();
-        else
-            $category = Category::find($id);
 
         $category->name = $request->name;
         $category->parent_id = $request->parent_id;
