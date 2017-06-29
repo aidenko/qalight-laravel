@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -101,5 +102,26 @@ class User extends Authenticatable{
 
     public function isSuperAdmin() {
         return $this->hasPermission('admin.super');
+    }
+
+    public function isAuthorOf(Model $model) {
+        if(method_exists($model, 'isAuthor'))
+            return $model->isAuthor($this);
+
+        return false;
+    }
+
+    public function isCreatorOf(Model $model) {
+        if(method_exists($model, 'isCreator'))
+            return $model->isCreator($this);
+
+        return false;
+    }
+
+    public function isOwnerOf(Model $model) {
+        if(method_exists($model, 'isOwner'))
+            return $model->isOwner($this);
+
+        return false;
     }
 }

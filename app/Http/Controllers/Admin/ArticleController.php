@@ -37,7 +37,8 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        if(Gate::allows('articles.create')){
+
+        if(Auth::user()->can('create', Article::class)){
             return view('themes.admin.html.article.new', array(
                 'tags' => Tag::all(),
                 'categories' => Category::all(),
@@ -58,10 +59,15 @@ class ArticleController extends Controller{
      */
     public function store(Store $request) {
 
-        $article = $this->save($request);
-        $article->tags()->sync($request->tags);
 
-        return redirect()->route('admin.article.show', $article->id);
+        if(Auth::user()->can('create', Article::class)){
+            $article = $this->save($request);
+            $article->tags()->sync($request->tags);
+
+            return redirect()->route('admin.article.show', $article->id);
+        }
+        else
+            return redirect()->route('admin.no-access');
     }
 
     /**
@@ -97,16 +103,22 @@ class ArticleController extends Controller{
     public function edit($id) {
 
         $article = Article::find($id);
-        $tags = Tag::all();
 
-        return view('themes.admin.html.article.edit',
-            array(
-                'article' => $article,
-                'tags' => $tags,
-                'assigned' => $article->tags->pluck('id'),
-                'categories' => Category::all(),
-                'authors' => User::all()
-            ));
+        if(Auth::user()->can('update', $article)){
+            $tags = Tag::all();
+
+            return view('themes.admin.html.article.edit',
+                array(
+                    'article' => $article,
+                    'tags' => $tags,
+                    'assigned' => $article->tags->pluck('id'),
+                    'categories' => Category::all(),
+                    'authors' => User::all()
+                ));
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -118,9 +130,16 @@ class ArticleController extends Controller{
      */
     public function update(Update $request, $id) {
 
-        $this->save($request, $id)->tags()->sync($request->tags);
+        $article = Article::find($id);
 
-        return redirect()->route('admin.article.show', $id);
+        if($article && Auth::user()->can('update', $article)){
+            $this->save($request, $article)->tags()->sync($request->tags);
+
+            return redirect()->route('admin.article.show', $id);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -130,29 +149,39 @@ class ArticleController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        Article::destroy($id);
 
-        return redirect()->route('admin.articles');
+        $article = Article::find($id);
+
+        if($article && Auth::user()->can('delete', $article)){
+
+            Article::destroy($id);
+
+            return redirect()->route('admin.articles');
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
      * @param  Request $request
-     * @param null $id
+     * @param null \App\Article $article
      * @return Article
      */
-    private function save(Request $request, $id = null) {
+    private function save(Request $request, $article = null) {
 
-        if(is_null($id))
+        if(is_null($article))
             $article = new Article();
-        else
-            $article = Article::find($id);
 
         $article->title = $request->title;
         $article->summary = $request->summary;
         $article->content = $request->article;
         $article->active = (boolean)$request->active;
         $article->category_id = $request->category_id;
-        $article->user_id = ($article->user_id === null ? Auth::user()->id : $article->user_id);
+
+        if($article->user_id === null)
+            $article->user_id = Auth::user()->id;
+
         $article->author_id = $request->author_id;
 
         $article->save();

@@ -27,42 +27,49 @@
             <ul class="collapsible" data-collapsible="expandable">
 
                 @foreach($articles as $article)
-                    <li>
-                        <div class="collapsible-header truncate">
+                    @can('view', $article)
+                        <li>
+                            <div class="collapsible-header truncate">
 
-                            {{ $article->title }}
+                                {{ $article->title }}
 
-                            <div class="actions right">
+                                <div class="actions right">
 
-                                <div class="switch left active">
-                                    <label>
-                                        Active
-                                        <input type="checkbox"{{$article->active ? ' checked' : ''}}>
-                                        <span class="lever"></span>
-                                    </label>
+                                    <div class="switch left active">
+                                        <label>
+                                            Active
+                                            <input type="checkbox"{{$article->active ? ' checked' : ''}}>
+                                            <span class="lever"></span>
+                                        </label>
+                                    </div>
+                                    @can('view', $article)
+                                        <a class="blue-text text-lighten-2 view" href="{{ route('admin.article.show', $article->id) }}" target="_blank" title="View article">
+                                            <i class="material-icons">open_in_new</i>
+                                        </a>
+                                    @endcan
+
+                                    @can('update', $article)
+                                        <a class="teal-text text-darken-1 edit" href="{{ route('admin.article.edit', $article->id) }}" title="Edit article">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                    @endcan
+
+                                    @can('delete', $article)
+                                        <span class="delete">
+                                            <input type="checkbox" id="article-{{$article->id}}"/>
+                                            <label for="article-{{$article->id}}">&nbsp;</label>
+                                        </span>
+                                    @endcan
                                 </div>
-                                @can('view', $article)
-                                    <a class="blue-text text-lighten-2 view" href="{{ route('admin.article.show', $article->id) }}" target="_blank" title="View article">
-                                        <i class="material-icons">open_in_new</i>
-                                    </a>
-                                @endcan
-                                <a class="teal-text text-darken-1 edit" href="{{ route('admin.article.edit', $article->id) }}" title="Edit article">
-                                    <i class="material-icons">edit</i>
-                                </a>
 
-                                <span class="delete">
-                                    <input type="checkbox" id="article-{{$article->id}}"/>
-                                    <label for="article-{{$article->id}}">&nbsp;</label>
-                                </span>
                             </div>
-
-                        </div>
-                        <div class="collapsible-body grey lighten-4">
-                            {{$article->author->name}}
-                            <br>
-                            {{$article->summary}}
-                        </div>
-                    </li>
+                            <div class="collapsible-body grey lighten-4">
+                                {{$article->author->name}}
+                                <br>
+                                {{$article->summary}}
+                            </div>
+                        </li>
+                    @endcan
                 @endforeach
             </ul>
         </div>

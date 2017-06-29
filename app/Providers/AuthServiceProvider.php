@@ -31,9 +31,6 @@ class AuthServiceProvider extends ServiceProvider{
             return $user->hasPermission('admin.view.dashboard');
         });
 
-        Gate::resource('articles', ArticlePolicy::class);
-        Gate::resource('articles', ArticlePolicy::class, [
-            'view.list' => 'viewList'
-        ]);
+        Gate::define('articles.view.list', 'App\Policies\ArticlePolicy@viewList');
     }
 }
