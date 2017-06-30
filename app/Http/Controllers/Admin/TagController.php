@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\TagRequest;
-use App\Tag;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Tag\Store;
+use App\Http\Requests\Admin\Tag\Update;
+use App\Tag;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller{
     /**
@@ -13,7 +16,10 @@ class TagController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function list() {
-        return view('themes.admin.html.tag.tags', ['tags' => Tag::all()]);
+        if(Auth::user()->can('viewList', Tag::class))
+            return view('themes.admin.html.tag.tags', ['tags' => Tag::all()]);
+
+        return redirect()->route('admin.no-access');
     }
 
     /**
@@ -22,17 +28,30 @@ class TagController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.tag.new');
+        if(Auth::user()->can('create', Tag::class)){
+            return view('themes.admin.html.tag.new');
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\TagRequest $request
+     * @param  \App\Http\Requests\Admin\Tag\Store $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TagRequest $request) {
-        return redirect()->route('admin.tag.show', $this->save($request)->id);
+    public function store(Store $request) {
+        if(Auth::user()->can('create', Tag::class)){
+
+            $tag = $this->save($request);
+
+            return redirect()->route('admin.tag.show', $tag->id);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -42,7 +61,15 @@ class TagController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        return view('themes.admin.html.tag.tag', ['tag' => Tag::find($id)]);
+
+        $tag = Tag::find($id);
+
+        if(Auth::user()->can('view', $tag)){
+            return view('themes.admin.html.tag.tag', ['tag' => $tag]);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -52,21 +79,37 @@ class TagController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        return view('themes.admin.html.tag.edit')->withTag(Tag::find($id));
+
+        $tag = Tag::find($id);
+
+        if(Auth::user()->can('update', $tag)){
+            return view('themes.admin.html.tag.edit')->withTag($tag);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\TagRequest $request
+     * @param  \App\Http\Requests\Admin\Tag\Update $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(TagRequest $request, $id) {
+    public function update(Update $request, $id) {
 
-        $this->save($request, $id);
+        $tag = Tag::find($id);
 
-        return redirect()->route('admin.tag.show', $id);
+        if($tag && Auth::user()->can('update', $tag)){
+
+            $this->save($request, $tag);
+
+            return redirect()->route('admin.tag.show', $id);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -76,21 +119,28 @@ class TagController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        Tag::destroy($id);
 
-        return redirect()->route('admin.tags.list');
+        $tag = Tag::find($id);
+
+        if($tag && Auth::user()->can('delete', $tag)){
+            Tag::destroy($id);
+
+            return redirect()->route('admin.tags.list');
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
-     * @param TagRequest $request
-     * @param null $id
+     * @param Request $request
+     * @param null $tag
      * @return Tag
      */
-    private function save(TagRequest $request, $id = null) {
-        if(is_null($id))
+    private function save(Request $request, $tag = null) {
+
+        if(is_null($tag))
             $tag = new Tag();
-        else
-            $tag = Tag::find($id);
 
         $tag->name = $request->name;;
 

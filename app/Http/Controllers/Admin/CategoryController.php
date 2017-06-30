@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CategoryRequest;
+use App\Http\Requests\Admin\Category\Store;
+use App\Http\Requests\Admin\Category\Update;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller{
     /**
@@ -15,7 +16,7 @@ class CategoryController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function list() {
-        if(Gate::allows('articles.view.list'))
+        if(Auth::user()->can('viewList', Category::class))
             return view('themes.admin.html.category.categories', ['categories' => Category::all()]);
 
         return redirect()->route('admin.no-access');
@@ -38,10 +39,10 @@ class CategoryController extends Controller{
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\CategoryRequest $request
+     * @param  \App\Http\Requests\Admin\Category\Store $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request) {
+    public function store(Store $request) {
 
         if(Auth::user()->can('create', Category::class)){
             $category = $this->save($request);
@@ -100,11 +101,11 @@ class CategoryController extends Controller{
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\CategoryRequest $request
+     * @param  \App\Http\Requests\Admin\Category\Update $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, $id) {
+    public function update(Update $request, $id) {
 
         $category = Category::find($id);
 
@@ -141,11 +142,11 @@ class CategoryController extends Controller{
     }
 
     /**
-     * @param CategoryRequest $request
+     * @param Request $request
      * @param \App\Category $category
      * @return Category
      */
-    private function save(CategoryRequest $request, $category = null) {
+    private function save(Request $request, $category = null) {
 
         if(is_null($category))
             $category = new Category();
