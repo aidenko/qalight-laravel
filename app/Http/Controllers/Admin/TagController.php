@@ -8,7 +8,6 @@ use App\Http\Requests\Admin\Tag\Update;
 use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class TagController extends Controller{
     /**
@@ -17,7 +16,7 @@ class TagController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function list() {
-        if(Gate::allows('tags.view.list'))
+        if(Auth::user()->can('viewList', Tag::class))
             return view('themes.admin.html.tag.tags', ['tags' => Tag::all()]);
 
         return redirect()->route('admin.no-access');

@@ -8,7 +8,6 @@ use App\Http\Requests\Admin\Category\Store;
 use App\Http\Requests\Admin\Category\Update;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller{
     /**
@@ -17,7 +16,7 @@ class CategoryController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function list() {
-        if(Gate::allows('articles.view.list'))
+        if(Auth::user()->can('viewList', Category::class))
             return view('themes.admin.html.category.categories', ['categories' => Category::all()]);
 
         return redirect()->route('admin.no-access');

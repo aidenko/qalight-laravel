@@ -11,7 +11,6 @@ use App\Tag;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 /**
  * Class ArticleController
@@ -25,7 +24,7 @@ class ArticleController extends Controller{
      */
     public function list($from = 0, $amount = 10) {
 
-        if(Gate::allows('articles.view.list'))
+        if(Auth::user()->can('viewList', Article::class))
             return view('themes.admin.html.article.articles', ['articles' => Article::all()]);
 
         return redirect()->route('admin.no-access');

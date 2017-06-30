@@ -36,9 +36,5 @@ class AuthServiceProvider extends ServiceProvider{
         Gate::define('admin.view.dashboard', function(User $user) {
             return $user->hasPermission('admin.view.dashboard');
         });
-
-        Gate::define('articles.view.list', 'App\Policies\ArticlePolicy@viewList');
-        Gate::define('categories.view.list', 'App\Policies\CategoryPolicy@viewList');
-        Gate::define('tags.view.list', 'App\Policies\TagPolicy@viewList');
     }
 }
