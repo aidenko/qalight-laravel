@@ -24,20 +24,22 @@
         <div class="col s12">
             <h4>
                 Tags
-                <a href="{{route('admin.tag.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+                @can('create', App\Tag::class)
+                    <a href="{{route('admin.tag.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+                @endcan
             </h4>
 
             <br>
             <div class="chips">
 
                 @foreach($tags as $tag)
-
-                    <a href="{{ route('admin.tag.show', $tag->id) }}" target="_blank">
-                        <div class="chip">
-                            {{ $tag->name }}
-                        </div>
-                    </a>
-
+                    @can('view', $tag)
+                        <a href="{{ route('admin.tag.show', $tag->id) }}" target="_blank">
+                            <div class="chip">
+                                {{ $tag->name }}
+                            </div>
+                        </a>
+                    @endcan
                 @endforeach
             </div>
         </div>
