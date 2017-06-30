@@ -1,6 +1,17 @@
 @extends('themes.admin.index')
 
 @section('file_css')
+    <style>
+        .permission-name {
+            font-weight: bold;
+        }
+
+        .permission-description {
+            color: #848484;
+            font-size: smaller;
+            font-style: italic;
+        }
+    </style>
 @stop
 
 @section('file_js')
@@ -10,7 +21,7 @@
 
             var permissions = jQuery('[name="p_incl[]"], [name="p_excl[]"]');
 
-            permissions.change(function(){
+            permissions.change(function () {
                 permissions.filter('[value="' + this.value + '"]').not(this).prop('checked', false);
             });
         });
@@ -78,7 +89,11 @@
                             <tbody>
                             @foreach($permissions as $p)
                                 <tr>
-                                    <td>{{$p->name}}</td>
+                                    <td>
+                                        <span class="permission-name tooltipped" data-html="true" data-position="right" data-delay="500" data-tooltip="{{$p->description}}">{{$p->name}}</span>
+                                        <br>
+                                        <span class="permission-description">{{$p->description}}</span>
+                                    </td>
                                     <td>
                                         <p>
                                             <input type="checkbox" id="rp-{{$p->id}}" disabled{{$rp->contains($p->id) ? ' checked' : ''}}/>
