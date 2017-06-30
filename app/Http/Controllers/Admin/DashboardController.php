@@ -13,7 +13,6 @@ class DashboardController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function index() {
-
         if(Gate::allows('admin.view.dashboard'))
             return view('themes.admin.html.dashboard.dashboard');
         else
