@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Admin\Category;
 
-use App\Tag;
+use App\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
 class Update extends FormRequest{
@@ -13,9 +13,9 @@ class Update extends FormRequest{
      */
     public function authorize() {
 
-        $tag = Tag::find($this->route('tag'));
+        $category = Category::find($this->route('category'));
 
-        return $tag && $this->user()->can('update', $tag);
+        return $category && $this->user()->can('update', $category);
     }
 
     /**
