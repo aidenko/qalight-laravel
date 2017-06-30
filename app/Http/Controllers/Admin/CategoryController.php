@@ -6,6 +6,7 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Category\Store;
 use App\Http\Requests\Admin\Category\Update;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -142,11 +143,11 @@ class CategoryController extends Controller{
     }
 
     /**
-     * @param CategoryRequest $request
+     * @param Request $request
      * @param \App\Category $category
      * @return Category
      */
-    private function save(CategoryRequest $request, $category = null) {
+    private function save(Request $request, $category = null) {
 
         if(is_null($category))
             $category = new Category();
