@@ -34,7 +34,7 @@ class AuthServiceProvider extends ServiceProvider{
         $this->registerPolicies();
 
         Gate::define('admin.view.dashboard', function(User $user) {
-            return $user->hasPermission('admin.view.dashboard');
+            return $user->isSuperAdmin() || $user->hasPermission('admin.view.dashboard');
         });
     }
 }
