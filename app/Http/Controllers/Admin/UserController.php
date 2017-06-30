@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\UpdateUserRequest;
-use App\Http\Requests\Admin\StoreUserRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\User\Store;
+use App\Http\Requests\Admin\User\Update;
 use App\Permission;
 use App\Role;
 use App\User;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller{
     /**
@@ -16,7 +17,10 @@ class UserController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function list() {
-        return view('themes.admin.html.user.users', ['users' => User::all()]);
+        if(Auth::user()->can('viewList', User::class))
+            return view('themes.admin.html.user.users', ['users' => User::all()]);
+
+        return redirect()->route('admin.no-access');
     }
 
     /**
@@ -25,23 +29,33 @@ class UserController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.user.new', [
-            'roles' => Role::all()
-        ]);
+        if(Auth::user()->can('create', User::class)){
+            return view('themes.admin.html.user.new', [
+                'roles' => Role::all()
+            ]);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\StoreUserRequest $request
+     * @param  \App\Http\Requests\Admin\User\Store $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUserRequest $request) {
-        $user = User::create($request->all());
+    public function store(Store $request) {
 
-        $user->roles()->sync($request->roles, false);
+        if(Auth::user()->can('create', User::class)){
+            $user = User::create($request->all());
 
-        return redirect()->route('admin.user.show', $user->id);
+            $user->roles()->sync($request->roles, false);
+
+            return redirect()->route('admin.user.show', $user->id);
+        }
+        else
+            return redirect()->route('admin.no-access');
     }
 
     /**
@@ -53,11 +67,16 @@ class UserController extends Controller{
     public function show($id) {
 
         $user = User::find($id);
+        if(Auth::user()->can('view', $user)){
 
-        return view('themes.admin.html.user.user', [
-            'user' => $user,
-            'permissions' => $user->permissions()
-        ]);
+            return view('themes.admin.html.user.user', [
+                'user' => $user,
+                'permissions' => $user->permissions()
+            ]);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -69,45 +88,57 @@ class UserController extends Controller{
     public function edit($id) {
 
         $user = User::find($id);
-        
-        return view('themes.admin.html.user.edit', [
-            'user' => $user,
-            'roles' => Role::all(),
-            'user_roles' => $user->roles->pluck('id'),
-            'permissions' => Permission::all(),
-            'rp' => $user->role_permissions()->pluck('id'),
-            'up' => $user->immediate_permissions->pluck('pivot.include', 'id')
-        ]);
+
+        if(Auth::user()->can('update', $user)){
+            return view('themes.admin.html.user.edit', [
+                'user' => $user,
+                'roles' => Role::all(),
+                'user_roles' => $user->roles->pluck('id'),
+                'permissions' => Permission::all(),
+                'rp' => $user->role_permissions()->pluck('id'),
+                'up' => $user->immediate_permissions->pluck('pivot.include', 'id')
+            ]);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\UpdateUserRequest $request
+     * @param  \App\Http\Requests\Admin\User\Update $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserRequest $request, $id) {
+    public function update(Update $request, $id) {
         $user = User::find($id);
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->roles()->sync($request->roles);
 
-        $permissions = [];
+        if($user && Auth::user()->can('update', $user)){
 
-        foreach($request->input('p_incl', []) as $p)
-            $permissions[$p] = ['include' => true];
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = $request->password;
+            $user->roles()->sync($request->roles);
 
-        foreach($request->input('p_excl', []) as $p)
-            $permissions[$p] = ['include' => false];
+            $permissions = [];
 
-        $user->immediate_permissions()->sync($permissions);
+            foreach($request->input('p_incl', []) as $p)
+                $permissions[$p] = ['include' => true];
 
-        $user->save();
+            foreach($request->input('p_excl', []) as $p)
+                $permissions[$p] = ['include' => false];
 
-        return redirect()->route('admin.user.show', $id);
+            $user->immediate_permissions()->sync($permissions);
+
+            $user->save();
+
+            return redirect()->route('admin.user.show', $id);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -117,8 +148,16 @@ class UserController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        User::destroy($id);
 
-        return redirect()->route('admin.users.list');
+        $user = User::find($id);
+
+        if($user && Auth::user()->can('delete', $user)){
+            User::destroy($id);
+
+            return redirect()->route('admin.users.list');
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 }

@@ -7,6 +7,7 @@ use App\Category;
 use App\Policies\ArticlePolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\TagPolicy;
+use App\Policies\UserPolicy;
 use App\Tag;
 use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -23,6 +24,7 @@ class AuthServiceProvider extends ServiceProvider{
         Article::class => ArticlePolicy::class,
         Category::class => CategoryPolicy::class,
         Tag::class => TagPolicy::class,
+        User::class => UserPolicy::class
     ];
 
     /**
