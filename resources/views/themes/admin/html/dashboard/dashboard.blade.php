@@ -4,13 +4,31 @@
 @stop
 
 @section('file_js')
+    <script src="https://unpkg.com/vue"></script>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                seen: true,
+                greeting: {
+                    m: 'Hello!!!'
+                }
+            }
+        });
+
+        jQuery('#app').click(function () {
+            app.seen = false;
+        });
+
+    </script>
 @stop
 
 @section('template')
 
-    <div class="row">
-        <div class="col s12">
-            Hello!
+    <div class="row" id="app">
+        <div class="col s12" v-if="seen">
+            @{{ greeting.m }}
         </div>
     </div>
     <div class="row">
