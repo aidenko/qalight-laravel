@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Admin\Role;
 
+use App\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRoleRequest extends FormRequest{
+class StoreRoleRequest extends FormRequest{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
     public function authorize() {
-        return true;
+        return $this->user()->can('create', Role::class);
     }
 
     /**

@@ -53,7 +53,8 @@ class RolePolicy{
      * @return mixed
      */
     public function update(User $user, Role $role) {
-        return $user->hasPermission('roles.edit.any');
+        return ($user->hasPermission('roles.edit.any') && !$role->isSuperAdmin()
+            || $user->hasPermission('roles.edit.admin.super'));
     }
 
     /**
@@ -64,6 +65,7 @@ class RolePolicy{
      * @return mixed
      */
     public function delete(User $user, Role $role) {
-        return $user->hasPermission('roles.delete.any');
+        return ($user->hasPermission('roles.delete.any') && !$role->isSuperAdmin()
+            || $user->hasPermission('roles.delete.admin.super'));
     }
 }

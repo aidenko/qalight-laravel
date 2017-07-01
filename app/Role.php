@@ -30,4 +30,16 @@ class Role extends Model{
     public function permissions() {
         return $this->belongsToMany('App\Permission');
     }
+
+    public function hasPermission($permission) {
+        return $this->permissions->pluck('name')->contains($permission);
+    }
+
+    public function isAdmin() {
+        return $this->hasPermission('admin.access');
+    }
+
+    public function isSuperAdmin() {
+        return $this->hasPermission('admin.super');
+    }
 }
