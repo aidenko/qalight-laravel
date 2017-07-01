@@ -4,18 +4,33 @@
 @stop
 
 @section('file_js')
+
+    <script src="https://unpkg.com/vue"></script>
+
     <script>
         jQuery('.edit, .view').click(function (event) {
             event.stopPropagation();
+        });
+
+        var searchs = new Vue({
+            el: '#list',
+            data: {
+                search: ''
+            },
+            methods: {
+                match: function (name) {
+                    return this.search == '' || name.indexOf(this.search) >= 0;
+                }
+            }
         });
     </script>
 @stop
 
 @section('template')
 
-    <div class="row">
+    <div class="row" id="list">
         <h4>
-            Permissions
+            Permissions <span><input type="text" v-model="search"></span>
             @can('create', App\Permission::class)
                 <a href="{{route('admin.permission.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
             @endcan
@@ -24,7 +39,7 @@
         <ul class="collapsible" data-collapsible="expandable">
             @foreach($permissions as $permission)
                 @can('view', $permission)
-                    <li>
+                    <li v-if="match('{{ $permission->name }}')">
                         <div class="collapsible-header truncate">
                             {{ $permission->name }}
 
