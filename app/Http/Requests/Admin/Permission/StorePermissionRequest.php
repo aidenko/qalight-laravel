@@ -1,18 +1,16 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Admin\Permission;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PermissionUpdateRequest extends FormRequest
-{
+class StorePermissionRequest extends FormRequest{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize() {
         return true;
     }
 
@@ -21,10 +19,9 @@ class PermissionUpdateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            'name' => 'required|max:255|unique:permissions,name,'.$this->route('permission'),
+            'name' => 'required|max:255|unique:permissions,name',
             'description' => 'max:1000'
         ];
     }
