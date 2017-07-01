@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\PermissionStoreRequest;
-use App\Http\Requests\Admin\PermissionUpdateRequest;
-use App\Permission;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Permission\StorePermissionRequest;
+use App\Http\Requests\Admin\Permission\UpdatePermissionRequest;
+use App\Permission;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionController extends Controller{
     /**
@@ -14,7 +15,10 @@ class PermissionController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function list() {
-        return view('themes.admin.html.permission.permissions', ['permissions' => Permission::all()]);
+        if(Auth::user()->can('viewList', Permission::class))
+            return view('themes.admin.html.permission.permissions', ['permissions' => Permission::all()]);
+
+        return redirect()->route('admin.no-access');
     }
 
     /**
@@ -23,19 +27,29 @@ class PermissionController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('themes.admin.html.permission.new');
+        if(Auth::user()->can('create', Permission::class)){
+            return view('themes.admin.html.permission.new');
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\PermissionStoreRequest $request
+     * @param  \App\Http\Requests\Admin\Permission\StorePermissionRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PermissionStoreRequest $request) {
-        $permission = Permission::create($request->all());
+    public function store(StorePermissionRequest $request) {
 
-        return redirect()->route('admin.permission.show', $permission->id);
+        if(Auth::user()->can('create', Permission::class)){
+            $permission = Permission::create($request->all());
+
+            return redirect()->route('admin.permission.show', $permission->id);
+        }
+        else
+            return redirect()->route('admin.no-access');
     }
 
     /**
@@ -45,7 +59,15 @@ class PermissionController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        return view('themes.admin.html.permission.permission', ['permission' => Permission::find($id)]);
+
+        $permission = Permission::find($id);
+
+        if(Auth::user()->can('view', $permission)){
+            return view('themes.admin.html.permission.permission', ['permission' => $permission]);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -55,25 +77,38 @@ class PermissionController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        return view('themes.admin.html.permission.edit', ['permission' => Permission::find($id)]);
+
+        $permission = Permission::find($id);
+
+        if(Auth::user()->can('update', $permission)){
+            return view('themes.admin.html.permission.edit', ['permission' => $permission]);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\PermissionUpdateRequest $request
+     * @param  \App\Http\Requests\Admin\Permission\UpdatePermissionRequest $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PermissionUpdateRequest $request, $id) {
+    public function update(UpdatePermissionRequest $request, $id) {
         $permission = Permission::find($id);
 
-        $permission->name = $request->name;
-        $permission->description = $request->input('description');
+        if($permission && Auth::user()->can('update', $permission)){
+            $permission->name = $request->name;
+            $permission->description = $request->input('description');
 
-        $permission->save();
+            $permission->save();
 
-        return redirect()->route('admin.permission.show', $id);
+            return redirect()->route('admin.permission.show', $id);
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 
     /**
@@ -83,8 +118,16 @@ class PermissionController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        Permission::destroy($id);
 
-        return redirect()->route('admin.permissions.list');
+        $permission = Permission::find($id);
+
+        if($permission && Auth::user()->can('delete', $permission)){
+            Permission::destroy($id);
+
+            return redirect()->route('admin.permissions.list');
+        }
+        else {
+            return redirect()->route('admin.no-access');
+        }
     }
 }

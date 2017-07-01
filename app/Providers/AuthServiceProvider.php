@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Article;
 use App\Category;
+use App\Permission;
 use App\Policies\ArticlePolicy;
 use App\Policies\CategoryPolicy;
+use App\Policies\PermissionPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\TagPolicy;
 use App\Policies\UserPolicy;
@@ -28,6 +30,7 @@ class AuthServiceProvider extends ServiceProvider{
         Tag::class => TagPolicy::class,
         User::class => UserPolicy::class,
         Role::class => RolePolicy::class,
+        Permission::class => PermissionPolicy::class,
     ];
 
     /**
