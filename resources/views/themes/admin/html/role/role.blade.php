@@ -29,21 +29,32 @@
 
     <div class="row">
         <div class="col s12 left-align">
-            <a href="{{route('admin.role.edit', $role->id)}}" class="waves-effect waves-light btn"><i class="material-icons left">mode_edit</i>Edit</a>
-            <form method="post" action="{{route('admin.role.destroy', $role->id)}}" style="display: inline;">
-                {{csrf_field()}}
-                <input name="_method" type="hidden" value="DELETE">
-                <button class="btn waves-effect waves-light" type="submit" name="action">Delete
-                    <i class="material-icons left">delete</i>
-                </button>
-            </form>
+            @can('edit', $role)
+                <a href="{{route('admin.role.edit', $role->id)}}" class="waves-effect waves-light btn"><i class="material-icons left">mode_edit</i>Edit</a>
+            @endcan
+
+            @can('delete', $role)
+                <form method="post" action="{{route('admin.role.destroy', $role->id)}}" style="display: inline;">
+                    {{csrf_field()}}
+                    <input name="_method" type="hidden" value="DELETE">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Delete
+                        <i class="material-icons left">delete</i>
+                    </button>
+                </form>
+            @endcan
         </div>
     </div>
 
     <div class="row">
         <div class="col s12">
             @if($parent)
-                <a class="parent" href="{{route('admin.role.show', $parent->id)}}"><i class="material-icons">call_missed</i><span>{{$parent->name}}</span></a>
+                @can('view', $parent)
+                    <a class="parent" href="{{route('admin.role.show', $parent->id)}}">
+                @endcan
+                    <i class="material-icons">call_missed</i><span>{{$parent->name}}</span>
+                @can('view', $parent)
+                    </a>
+                @endcan
             @endif
             <h4>{{$role->name}}</h4>
         </div>

@@ -16,29 +16,36 @@
     <div class="row">
         <h4>
             Roles
-            <a href="{{route('admin.role.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+            @can('create', App\Role::class)
+                <a href="{{route('admin.role.create')}}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>New</a>
+            @endcan
         </h4>
 
         <ul class="collapsible" data-collapsible="expandable">
             @foreach($roles as $role)
+                @can('view', $role)
+                    <li>
+                        <div class="collapsible-header truncate">
+                            {{ $role->name }}
 
-                <li>
-                    <div class="collapsible-header truncate">
-                        {{ $role->name }}
-                        <a class="teal-text text-darken-1 right edit" href="{{ route('admin.role.edit', $role->id) }}" title="Edit role">
-                            <i class="material-icons">edit</i>
-                        </a>
+                            @can('edit', $role)
+                                <a class="teal-text text-darken-1 right edit" href="{{ route('admin.role.edit', $role->id) }}" title="Edit role">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            @endcan
 
-                        <a class="blue-text text-lighten-2 right view" href="{{ route('admin.role.show', $role->id) }}" target="_blank" title="View role">
-                            <i class="material-icons">open_in_new</i>
-                        </a>
-                    </div>
-                    <div class="collapsible-body grey lighten-4">
-                        <h6>Permissions</h6>
-                        {{$role->permissions->pluck('name')->implode(', ')}}
-                    </div>
-                </li>
-
+                            @can('view', $role)
+                                <a class="blue-text text-lighten-2 right view" href="{{ route('admin.role.show', $role->id) }}" target="_blank" title="View role">
+                                    <i class="material-icons">open_in_new</i>
+                                </a>
+                            @endcan
+                        </div>
+                        <div class="collapsible-body grey lighten-4">
+                            <h6>Permissions</h6>
+                            {{$role->permissions->pluck('name')->implode(', ')}}
+                        </div>
+                    </li>
+                @endcan
             @endforeach
         </ul>
 
