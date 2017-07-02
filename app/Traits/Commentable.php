@@ -9,10 +9,16 @@
 namespace App\Traits;
 
 
+use App\Article;
 use App\Comment;
 use Illuminate\Support\Facades\Auth;
 
 trait Commentable{
+
+    public static $commentable_types = [
+      'article' => Article::class
+    ];
+
     public function comments() {
         return $this->morphMany('App\Comment', 'commentable');
     }

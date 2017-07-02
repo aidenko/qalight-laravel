@@ -93,8 +93,8 @@
 
     <div class="row">
         <div class="col s12">
-            <a href="{{route('admin.comments', ['article', $article->id])}}" class="btn waves-effect waves-light" type="button">Manage comments
-                <i class="material-icons left">chat</i>
+            <a href="{{route('admin.comments', ['article', $article->id])}}" class="btn waves-effect waves-light" type="button">
+                <i class="material-icons left">chat</i>Manage comments
             </a>
         </div>
     </div>

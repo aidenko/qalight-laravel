@@ -67,6 +67,9 @@ class UserController extends Controller{
     public function show($id) {
 
         $user = User::find($id);
+
+        dd($user->comments);
+
         if(Auth::user()->can('view', $user)){
 
             return view('themes.admin.html.user.user', [
