@@ -27,7 +27,7 @@
                 <form method="post" action="{{route('admin.article.destroy', $article->id)}}" style="display: inline;">
                     {{csrf_field()}}
                     <input name="_method" type="hidden" value="DELETE">
-                    <button class="btn waves-effect waves-light" type="submit" name="action">Delete
+                    <button class="btn waves-effect waves-light" type="submit">Delete
                         <i class="material-icons left">delete</i>
                     </button>
                 </form>
@@ -88,6 +88,14 @@
                     @endforeach
                 </div>
             @endif
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <a href="{{route('admin.comments', ['article', $article->id])}}" class="btn waves-effect waves-light" type="button">
+                <i class="material-icons left">chat</i>Manage comments
+            </a>
         </div>
     </div>
 

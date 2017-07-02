@@ -3,12 +3,13 @@
 namespace App;
 
 use App\Traits\Authorable;
+use App\Traits\Commentable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model{
-    use SoftDeletes, Sluggable, Authorable;
+    use SoftDeletes, Sluggable, Authorable, Commentable;
 
     /**
      * The attributes that should be mutated to dates.
