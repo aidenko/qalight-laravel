@@ -32,6 +32,7 @@ foreach(array('github', 'facebook', 'google') as $provider) {
     });
 }
 
+Route::post('/comment/add', 'CommentController@add')->name('comment.add');
 
 Route::prefix('admin')->namespace('Admin\Auth')->group(function() {
     Route::get('login', 'LoginController@showLoginForm')->name('admin.login');
@@ -49,4 +50,6 @@ Route::middleware(['admin'])->prefix('admin')->namespace('Admin')->group(functio
         Route::resource($path, ucfirst($path).'Controller', ['except' => ['index'], 'as' => 'admin']);
         Route::get(str_plural($path).'/{from?}/{amount?}', ucfirst($path).'Controller@list')->name('admin.'.str_plural($path).'.list');
     }
+
+    Route::get('/{commentable_type}/{commentable_id}/comments', 'CommentController@index')->name('admin.comments');
 });
