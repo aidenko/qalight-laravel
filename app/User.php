@@ -2,13 +2,14 @@
 
 namespace App;
 
+use App\Traits\Commentable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable{
-    use Notifiable;
+    use Notifiable, Commentable;
 
     /**
      * The attributes that are mass assignable.
@@ -123,5 +124,9 @@ class User extends Authenticatable{
             return $model->isOwner($this);
 
         return false;
+    }
+
+    public function comments(){
+        return $this->hasMany('App\Comment');
     }
 }
