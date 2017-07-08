@@ -1,5 +1,7 @@
 <ul>
-
+    <li>
+        <a href="{{ route('admin') }}">Dashboard</a>
+    </li>
     <li>
         <a href="{{ route('admin.articles.list') }}">Articles</a>
     </li>
